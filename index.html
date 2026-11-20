@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATHAR Islamic Youth Forum — Inspiring Faith, Building Character</title>
+<meta name="description" content="ATHAR Islamic Youth Forum (AIYF) — a youth-led forum inspiring faith and building character through Quran learning, study circles, youth development and community service.">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Inter:wght@400;500;600;700&family=Hind+Siliguri:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#071F3D;--navy-dk:#041629;--navy-lt:#12335E;
+  --orange:#D6A640;--orange-dk:#B98A2B;--orange-lt:#E9C676;--gold-ink:#8A6A1F;
+  --bg:#FFFFFF;--bg-alt:#F5F1E8;
+  --ink:#071F3D;--muted:#2F3F56;--line:rgba(7,31,61,.1);--gold-line:rgba(214,166,64,.34);
+  --r-sm:6px;--r-md:14px;--r-lg:28px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#06142A;--bg-alt:#0A1D38;--ink:#EEF2F8;--muted:#B4C0D2;--line:rgba(255,255,255,.1);--gold-ink:#E9C676;
+    --navy:#2A4F86;--navy-lt:#3E6AA8;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#06142A;--bg-alt:#0A1D38;--ink:#EEF2F8;--muted:#B4C0D2;--line:rgba(255,255,255,.1);--gold-ink:#E9C676;
+  --navy:#2A4F86;--navy-lt:#3E6AA8;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif;
+  background:var(--bg);color:var(--ink);
+  min-height:100vh;overflow-x:hidden;line-height:1.6;
+}
+img{max-width:100%;display:block}
+a{color:inherit}
+button{font-family:inherit;cursor:pointer}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
+h1,h2,h3,h4{font-family:'Montserrat',sans-serif;line-height:1.15;letter-spacing:-.01em;}
+
+/* ===== HEADER ===== */
+header{
+  position:sticky;top:0;z-index:500;background:#071F3D;
+  border-bottom:1px solid rgba(214,166,64,.28);
+  transition:box-shadow .35s ease,background-color .35s ease,backdrop-filter .35s ease;
+}
+header::before{content:"";display:block;height:3px;background:linear-gradient(90deg,#B98A2B,#E9C676,#B98A2B);}
+header.scrolled{
+  box-shadow:0 8px 28px rgba(4,22,41,.35);
+  background:rgba(7,31,61,.92);
+  backdrop-filter:saturate(180%) blur(14px);
+  -webkit-backdrop-filter:saturate(180%) blur(14px);
+}
+/* Keep the header fully solid & legible while the full-screen mobile menu is open
+   (the dark menu panel sits right beneath it, so a blurred/translucent header
+   would wash out against it). */
+body.nav-open header{background:#071F3D!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;box-shadow:none!important;}
+.hdr-inner{max-width:1120px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;transition:transform .25s cubic-bezier(.2,.8,.2,1);}
+.brand:hover{transform:translateY(-1px);}
+.brand-mark{width:44px;height:44px;flex-shrink:0;border-radius:50%;background:#fff;padding:3px;object-fit:contain;box-shadow:0 0 0 2px rgba(214,166,64,.65);transition:transform .35s cubic-bezier(.2,.8,.2,1);}
+.brand:hover .brand-mark{transform:perspective(300px) rotateY(18deg) rotate(-4deg) scale(1.06);}
+.brand-text{font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.2rem;letter-spacing:.16em;color:#fff;white-space:nowrap;display:flex;flex-direction:column;line-height:1.05;}
+.brand-text small{font-size:.54rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--orange-lt);margin-top:4px;}
+nav{display:flex;align-items:center;gap:6px;}
+nav a{
+  position:relative;text-decoration:none;color:rgba(255,255,255,.84);font-size:.92rem;font-weight:600;
+  padding:9px 14px;border-radius:var(--r-sm);transition:color .2s,background .2s;white-space:nowrap;
+}
+nav a::after{content:"";position:absolute;left:14px;right:14px;bottom:5px;height:2px;background:var(--orange);border-radius:2px;transform:scaleX(0);transform-origin:left;transition:transform .25s cubic-bezier(.2,.8,.2,1);}
+nav a:hover{color:#fff;background:rgba(255,255,255,.08);}
+nav a:hover::after{transform:scaleX(1);}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:11px 22px;border-radius:var(--r-sm);font-weight:700;font-size:.9rem;
+  border:none;text-decoration:none;transition:transform .2s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease,opacity .2s;
+  transform-style:preserve-3d;
+}
+.btn-orange{position:relative;overflow:hidden;background:linear-gradient(135deg,var(--orange),var(--orange-dk));color:#071F3D;box-shadow:0 6px 20px rgba(214,166,64,.34);}
+.btn-orange::before{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(120deg,transparent,rgba(255,255,255,.4),transparent);transform:skewX(-20deg);transition:left .65s ease;}
+.btn-orange:hover::before{left:130%;}
+.btn-orange:hover{transform:perspective(600px) translateY(-2px) rotateX(6deg);box-shadow:0 12px 28px rgba(214,166,64,.4);}
+.btn-orange:active{transform:perspective(600px) translateY(1px) rotateX(-4deg) scale(.98);box-shadow:0 4px 14px rgba(214,166,64,.3);}
+.btn-outline{background:transparent;color:var(--navy);border:1.5px solid var(--line);}
+.btn-outline:hover{border-color:var(--navy);transform:perspective(600px) translateY(-2px) rotateX(6deg);}
+.btn-outline:active{transform:perspective(600px) translateY(1px) scale(.98);}
+.btn-white{background:#fff;color:var(--navy);}
+.btn-white:hover{transform:perspective(600px) translateY(-2px) rotateX(6deg);box-shadow:0 10px 24px rgba(0,0,0,.18);}
+.btn-white:active{transform:perspective(600px) translateY(1px) scale(.98);}
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:6px;position:relative;z-index:401;}
+.hamburger span{display:block;width:22px;height:2px;background:#fff;border-radius:2px;transition:transform .3s cubic-bezier(.2,.8,.2,1),opacity .2s ease,background .3s ease;}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.open span:nth-child(2){opacity:0;}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+body.nav-open{overflow:hidden;}
+
+/* ===== HERO ===== */
+.hero{
+  position:relative;color:#fff;overflow:hidden;padding:80px 0 0;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23D6A640' stroke-opacity='.11' stroke-width='1'%3E%3Crect x='18' y='18' width='36' height='36'/%3E%3Crect x='18' y='18' width='36' height='36' transform='rotate(45 36 36)'/%3E%3C/g%3E%3C/svg%3E"),radial-gradient(ellipse 800px 520px at 12% 18%,rgba(214,166,64,.14),transparent 60%),linear-gradient(165deg,var(--navy-dk),var(--navy) 130%);
+}
+.hero::before,.hero::after{content:"";position:absolute;z-index:0;border-radius:50%;filter:blur(64px);pointer-events:none;}
+.hero::before{width:380px;height:380px;background:rgba(214,166,64,.28);top:-130px;right:-90px;animation:blobFloat 11s ease-in-out infinite;}
+.hero::after{width:300px;height:300px;background:rgba(27,58,107,.55);bottom:-150px;left:8%;animation:blobFloat 14s ease-in-out infinite reverse;}
+@keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-22px,24px) scale(1.08);}}
+.hero-inner{
+  position:relative;z-index:1;max-width:1120px;margin:0 auto;padding:0 24px 90px;
+  display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center;
+}
+.hero-eyebrow{color:var(--orange-lt);font-weight:700;font-size:.85rem;margin-bottom:18px;}
+.hero h1{font-size:clamp(2.1rem,4.6vw,3.5rem);font-weight:900;color:#fff;margin-bottom:22px;}
+.hero h1 em{font-style:normal;color:var(--orange);}
+.hero-bn{font-family:'Hind Siliguri','Inter',sans-serif;color:var(--orange-lt);font-size:1.12rem;font-weight:600;margin:-6px 0 18px;}
+.hero p{color:#C7D2E3;font-size:1.06rem;max-width:480px;margin-bottom:34px;}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+.hero-visual{position:relative;height:360px;display:flex;align-items:center;justify-content:center;}
+.hero-logo{position:relative;width:clamp(170px,34vw,260px);height:clamp(170px,34vw,260px);animation:heroFloat 7s ease-in-out infinite;transform-style:preserve-3d;}
+.hero-logo::before{content:"";position:absolute;inset:-32px;border-radius:50%;background:radial-gradient(circle,rgba(214,166,64,.32) 0%,rgba(214,166,64,0) 68%);}
+.hero-logo-ring{position:absolute;inset:0;width:100%;height:100%;animation:heroRingSpin 26s linear infinite;}
+.hero-logo-disc{position:relative;width:100%;height:100%;border-radius:50%;overflow:hidden;background:#fff;box-shadow:0 0 0 5px rgba(214,166,64,.5),0 22px 54px rgba(0,0,0,.4);}
+.hero-logo-disc img{width:100%;height:100%;object-fit:contain;display:block;padding:7%;box-sizing:border-box;}
+@keyframes heroFloat{0%,100%{transform:perspective(700px) translateY(0) rotateY(0deg) rotateX(0deg);}50%{transform:perspective(700px) translateY(-14px) rotateY(10deg) rotateX(4deg);}}
+@keyframes heroRingSpin{to{transform:rotate(360deg);}}
+
+/* ===== PREMIUM ENTRANCE + SCROLL REVEAL ===== */
+.hero-eyebrow,.hero h1,.hero-bn,.hero p,.hero-actions,.hero-visual{opacity:0;transform:translateY(18px);}
+body.loaded .hero-eyebrow{animation:heroIn .7s cubic-bezier(.16,.84,.44,1) .1s forwards;}
+body.loaded .hero h1{animation:heroIn .7s cubic-bezier(.16,.84,.44,1) .22s forwards;}
+body.loaded .hero-bn{animation:heroIn .7s cubic-bezier(.16,.84,.44,1) .3s forwards;}
+body.loaded .hero p{animation:heroIn .7s cubic-bezier(.16,.84,.44,1) .38s forwards;}
+body.loaded .hero-actions{animation:heroIn .7s cubic-bezier(.16,.84,.44,1) .46s forwards;}
+body.loaded .hero-visual{animation:heroIn .9s cubic-bezier(.16,.84,.44,1) .3s forwards;}
+@keyframes heroIn{to{opacity:1;transform:translateY(0);}}
+.reveal{opacity:0;transform:perspective(900px) rotateX(-10deg) translateY(36px);transform-origin:50% 100%;transition:opacity .75s cubic-bezier(.16,.84,.44,1),transform .75s cubic-bezier(.16,.84,.44,1);}
+.reveal.visible{opacity:1;transform:perspective(900px) rotateX(0deg) translateY(0);}
+.reveal-stagger .reveal:nth-child(1){transition-delay:.04s;}
+.reveal-stagger .reveal:nth-child(2){transition-delay:.11s;}
+.reveal-stagger .reveal:nth-child(3){transition-delay:.18s;}
+.reveal-stagger .reveal:nth-child(4){transition-delay:.25s;}
+.reveal-stagger .reveal:nth-child(5){transition-delay:.32s;}
+.reveal-stagger .reveal:nth-child(6){transition-delay:.39s;}
+@media (prefers-reduced-motion:reduce){
+  .hero-eyebrow,.hero h1,.hero-bn,.hero p,.hero-actions,.hero-visual,.reveal{animation:none!important;transition:none!important;opacity:1!important;transform:none!important;}
+  .hero::before,.hero::after,.hero-logo,.hero-logo-ring{animation:none!important;}
+  nav,nav a,.hamburger span{transition:none!important;}
+}
+
+/* ===== SKELETON LOADING ===== */
+.shimmer{background:linear-gradient(90deg,var(--bg-alt) 25%,rgba(130,140,160,.22) 50%,var(--bg-alt) 75%);background-size:600px 100%;animation:shimmerMove 1.5s linear infinite;border-radius:6px;}
+@keyframes shimmerMove{0%{background-position:-300px 0;}100%{background-position:300px 0;}}
+.skel-card{background:var(--bg);border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;display:flex;flex-direction:column;}
+.skel-img{width:100%;height:170px;border-radius:0;}
+.skel-body{padding:18px;display:flex;flex-direction:column;gap:10px;}
+.skel-line{height:9px;}
+.skel-team{display:flex;gap:16px;align-items:flex-start;background:var(--bg);border:1px solid var(--line);border-left:4px solid var(--line);border-radius:10px;padding:20px;}
+.skel-avatar{width:64px;height:64px;border-radius:50%;flex-shrink:0;}
+.skel-team .skel-body{padding:0;flex:1;justify-content:center;}
+@media (prefers-reduced-motion:reduce){.shimmer{animation:none;}}
+
+/* ===== STATS STRIP ===== */
+.stats{background:var(--bg);border-bottom:1px solid var(--gold-line);}
+.stats-inner{max-width:1120px;margin:0 auto;padding:44px 24px;display:grid;grid-template-columns:repeat(4,1fr);gap:28px;text-align:center;}
+.stat-num{font-family:'Montserrat',sans-serif;font-weight:900;font-size:2.1rem;background:linear-gradient(135deg,var(--navy),var(--navy-lt));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.stat-num span{background:none;-webkit-background-clip:unset;background-clip:unset;color:var(--orange);}
+.stat-label{color:var(--muted);font-size:.82rem;font-weight:600;margin-top:4px;}
+
+/* ===== SECTION GENERIC ===== */
+.section{padding:90px 0;}
+.section-head{max-width:620px;margin-bottom:52px;}
+.section-tag{color:var(--gold-ink);font-weight:700;font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px;}
+.section-head h2{font-size:clamp(1.6rem,3vw,2.3rem);font-weight:800;color:var(--ink);}
+.section-head p{color:var(--muted);margin-top:14px;font-size:1rem;}
+
+/* ===== ABOUT ===== */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;}
+.about-text p{color:var(--muted);margin-bottom:16px;font-size:1rem;}
+.about-text p:last-child{margin-bottom:0;}
+.about-graphic{position:relative;aspect-ratio:1/1;background:var(--bg-alt);border-radius:var(--r-lg);display:flex;align-items:center;justify-content:center;overflow:hidden;transition:transform .4s cubic-bezier(.2,.8,.2,1),box-shadow .4s ease;}
+.about-graphic:hover{transform:perspective(900px) rotateY(-6deg) rotateX(3deg);box-shadow:0 24px 50px rgba(7,31,61,.18);}
+.about-graphic svg{width:58%;height:58%;}
+
+/* ===== PROGRAMS ===== */
+.prog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px;}
+.prog-card{background:var(--bg);border:1px solid var(--gold-line);border-radius:var(--r-md);overflow:hidden;cursor:pointer;position:relative;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease,border-color .3s ease;display:flex;flex-direction:column;box-shadow:0 1px 3px rgba(7,31,61,.05);}
+.prog-card::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--orange),var(--orange-lt));transform:scaleX(0);transform-origin:left;transition:transform .35s ease;z-index:1;}
+.prog-card:hover{transform:perspective(900px) translateY(-6px) rotateX(3deg) rotateY(-2deg);box-shadow:0 18px 40px rgba(7,31,61,.18),0 4px 12px rgba(7,31,61,.08);border-color:var(--orange);}
+.prog-card:active{transform:perspective(900px) scale(.98) rotateX(1deg);}
+.prog-card:hover::before{transform:scaleX(1);}
+.prog-img{width:100%;height:170px;object-fit:cover;display:block;background:var(--bg-alt);}
+.prog-img-ph{width:100%;height:170px;background:linear-gradient(135deg,var(--navy),var(--navy-lt));display:flex;align-items:center;justify-content:center;font-size:2.6rem;}
+.prog-badge{position:absolute;top:10px;left:10px;font-size:.66rem;font-weight:700;letter-spacing:.06em;padding:4px 10px;border-radius:5px;text-transform:uppercase;color:#fff;backdrop-filter:blur(3px);}
+.prog-badge.active{background:rgba(34,150,94,.9);}
+.prog-badge.upcoming{background:rgba(214,166,64,.96);color:#071F3D;}
+.prog-badge.closed{background:rgba(91,100,114,.9);}
+.prog-body{padding:18px;flex:1;display:flex;flex-direction:column;}
+.prog-cat{display:inline-flex;align-items:center;gap:4px;background:rgba(7,31,61,.06);border:1px solid var(--line);padding:3px 9px;border-radius:5px;font-size:.7rem;font-weight:600;color:var(--navy);margin-bottom:10px;width:fit-content;}
+.prog-card h3{font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:700;margin-bottom:8px;color:var(--ink);line-height:1.3;}
+.prog-card p{color:var(--muted);font-size:.85rem;line-height:1.6;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.prog-more{display:inline-flex;align-items:center;gap:5px;margin-top:12px;color:var(--gold-ink);font-size:.8rem;font-weight:700;background:none;border:none;cursor:pointer;padding:0;transition:gap .2s;}
+.prog-more::after{content:"→";}
+.prog-card:hover .prog-more{gap:9px;}
+
+/* Team — horizontal accent-bar cards, deliberately different from Programs */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px;}
+.team-card{display:flex;gap:16px;align-items:flex-start;background:var(--bg);border:1px solid var(--gold-line);border-left:4px solid var(--orange);border-radius:10px;padding:20px;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease,border-left-color .3s ease;}
+.team-card:hover{transform:perspective(900px) translateY(-4px) rotateX(2deg);box-shadow:0 14px 32px rgba(7,31,61,.14);border-left-color:var(--navy);}
+.team-photo{width:64px;height:64px;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--bg-alt);}
+.team-photo-ph{width:64px;height:64px;border-radius:50%;flex-shrink:0;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-weight:800;font-size:1.15rem;}
+.team-info{min-width:0;}
+.team-info h3{font-family:'Montserrat',sans-serif;font-size:.98rem;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.team-role{display:block;color:var(--gold-ink);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;}
+.team-bio{color:var(--muted);font-size:.83rem;line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+/* Program detail modal */
+.pg-modal-ov{position:fixed;inset:0;z-index:5000;background:rgba(7,31,61,.6);display:flex;align-items:flex-start;justify-content:center;padding:30px 16px;opacity:0;pointer-events:none;transition:opacity .2s;overflow-y:auto;}
+.pg-modal-ov.open{opacity:1;pointer-events:all;}
+.pg-modal{background:var(--bg);border-radius:var(--r-lg);max-width:560px;width:100%;margin:auto;overflow:hidden;position:relative;}
+.pg-modal-close{position:absolute;top:12px;right:12px;background:rgba(7,31,61,.55);color:#fff;border:none;width:32px;height:32px;border-radius:50%;font-size:1rem;cursor:pointer;z-index:2;}
+.pg-modal-img{width:100%;height:220px;object-fit:cover;display:block;background:var(--bg-alt);}
+.pg-modal-img-ph{width:100%;height:220px;background:linear-gradient(135deg,var(--navy),var(--navy-lt));display:flex;align-items:center;justify-content:center;font-size:3rem;}
+.pg-modal-body{padding:26px;}
+.pg-modal-body h2{font-family:'Montserrat',sans-serif;font-size:1.3rem;font-weight:800;color:var(--ink);margin:10px 0 14px;}
+.pg-modal-body p{color:var(--muted);font-size:.94rem;line-height:1.7;}
+.pg-join-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;background:linear-gradient(135deg,var(--orange),var(--orange-dk));color:#071F3D;padding:13px 20px;border-radius:9px;font-weight:700;font-size:.9rem;border:none;cursor:pointer;margin-top:20px;transition:opacity .2s;}
+.pg-join-btn:hover{opacity:.9;}
+
+/* Join This Program form modal */
+.jf-modal-ov{position:fixed;inset:0;z-index:5100;background:rgba(7,31,61,.6);display:flex;align-items:flex-start;justify-content:center;padding:30px 16px;opacity:0;pointer-events:none;transition:opacity .2s;overflow-y:auto;}
+.jf-modal-ov.open{opacity:1;pointer-events:all;}
+.jf-modal{background:var(--bg);border-radius:var(--r-lg);max-width:440px;width:100%;margin:auto;padding:28px;}
+.jf-modal h3{font-family:'Montserrat',sans-serif;font-size:1.2rem;font-weight:800;color:var(--ink);margin-bottom:4px;}
+.jf-modal .jf-sub{color:var(--muted);font-size:.85rem;margin-bottom:20px;}
+.jf-fg{margin-bottom:14px;}
+.jf-fg label{display:block;font-size:.8rem;font-weight:600;color:var(--muted);margin-bottom:6px;}
+.jf-fg input,.jf-fg textarea{width:100%;background:var(--bg-alt);border:1px solid var(--line);color:var(--ink);padding:11px 14px;border-radius:8px;font-size:.9rem;outline:none;font-family:inherit;transition:border-color .2s;}
+.jf-fg input:focus,.jf-fg textarea:focus{border-color:var(--orange);}
+.jf-fg textarea{min-height:70px;resize:vertical;}
+.jf-close{float:right;background:none;border:none;font-size:1.1rem;color:var(--muted);cursor:pointer;}
+.jf-success{text-align:center;padding:10px 0;}
+.jf-success .ri{font-size:3rem;margin-bottom:14px;}
+.jf-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--navy-dk);color:#fff;padding:13px 22px;border-radius:10px;font-size:.87rem;font-weight:600;transition:transform .3s;z-index:9000;box-shadow:0 8px 24px rgba(0,0,0,.3);}
+.jf-toast.show{transform:translateX(-50%) translateY(0);}
+.jf-toast.err{background:#c0392b;}
+
+/* ===== JOIN CTA BANNER ===== */
+.join-banner{
+  background:linear-gradient(135deg,#E6BC5A,#D6A640 55%,#C1912B);border-radius:var(--r-lg);padding:56px 48px;
+  display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;color:var(--navy-dk);
+}
+.join-banner h2{font-size:clamp(1.5rem,2.6vw,2rem);font-weight:800;max-width:460px;}
+.join-banner p{margin-top:10px;color:rgba(7,31,61,.75);max-width:440px;}
+.join-actions{display:flex;gap:14px;flex-wrap:wrap;flex-shrink:0;}
+
+/* ===== CONTACT ===== */
+.contact-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;}
+.contact-info h3{font-size:1.2rem;font-weight:700;margin-bottom:18px;color:var(--ink);}
+.contact-row{display:flex;gap:14px;margin-bottom:20px;align-items:flex-start;}
+.contact-ico{width:20px;height:20px;color:var(--orange);flex-shrink:0;margin-top:2px;}
+.contact-row div{color:var(--muted);font-size:.92rem;}
+.contact-row strong{display:block;color:var(--ink);font-size:.92rem;margin-bottom:2px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-grid .full{grid-column:1/-1;}
+.field label{display:block;font-size:.82rem;font-weight:600;color:var(--muted);margin-bottom:7px;}
+.field input,.field textarea{
+  width:100%;background:var(--bg-alt);border:1px solid var(--line);color:var(--ink);
+  padding:12px 14px;border-radius:var(--r-sm);font-size:.92rem;font-family:inherit;outline:none;
+  transition:border-color .2s;
+}
+.field input:focus,.field textarea:focus{border-color:var(--orange);}
+.field textarea{min-height:110px;resize:vertical;}
+.form-msg{font-size:.86rem;margin-top:14px;display:none;}
+.form-msg.show{display:block;}
+.form-msg.ok{color:#1a9c5a;}
+
+/* ===== FOOTER ===== */
+footer{background:var(--navy);color:#C3CEDF;padding:56px 0 26px;border-top:3px solid var(--orange);}
+.foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.foot-brand{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.foot-brand .brand-mark{width:46px;height:46px;}
+.foot-brand span{font-family:'Montserrat',sans-serif;font-weight:800;color:#fff;font-size:1.15rem;letter-spacing:.16em;display:flex;flex-direction:column;line-height:1.05;}
+.foot-brand span small{font-size:.54rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--orange-lt);margin-top:4px;}
+footer p.desc{font-size:.88rem;color:#8FA0BC;max-width:280px;}
+footer h4{color:var(--orange-lt);font-size:.85rem;font-weight:700;margin-bottom:14px;letter-spacing:.02em;}
+footer nav a{display:block;color:#B9C6DC;text-decoration:none;font-size:.88rem;padding:5px 0;}
+footer nav a:hover{color:var(--orange-lt);}
+.foot-bottom{border-top:1px solid rgba(214,166,64,.28);padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:.8rem;color:#7E90AC;}
+
+
+/* ===== ATHAR: departments, membership, team groups ===== */
+.about-graphic{background:#fff!important;border:1px solid var(--gold-line);}
+.about-graphic img{width:82%;height:auto;display:block;}
+.dept-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.dept-card{background:var(--bg);border:1px solid var(--gold-line);border-top:3px solid var(--orange);border-radius:var(--r-md);padding:26px 22px;box-shadow:0 1px 3px rgba(7,31,61,.05);transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease;}
+.dept-card:hover{transform:perspective(900px) translateY(-5px) rotateX(2deg);box-shadow:0 16px 36px rgba(7,31,61,.14);}
+.dept-ico{width:52px;height:52px;border-radius:14px;background:var(--navy);display:flex;align-items:center;justify-content:center;font-size:1.5rem;margin-bottom:16px;box-shadow:inset 0 0 0 1.5px rgba(214,166,64,.65);}
+.dept-card h3{font-size:1.02rem;font-weight:800;color:var(--ink);line-height:1.25;}
+.dept-bn{display:block;font-family:'Hind Siliguri','Inter',sans-serif;color:var(--gold-ink);font-size:.86rem;font-weight:600;margin:3px 0 8px;}
+.dept-card p{color:var(--muted);font-size:.88rem;line-height:1.65;}
+.mem-section{position:relative;overflow:hidden;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23D6A640' stroke-opacity='.11' stroke-width='1'%3E%3Crect x='18' y='18' width='36' height='36'/%3E%3Crect x='18' y='18' width='36' height='36' transform='rotate(45 36 36)'/%3E%3C/g%3E%3C/svg%3E"),linear-gradient(165deg,var(--navy-dk),var(--navy) 130%);}
+.mem-section .section-head h2{color:#fff;}
+.mem-section .section-head p{color:#C3CEDF;}
+.mem-section .section-tag{color:var(--orange-lt);}
+.mem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.mem-card{background:rgba(255,255,255,.05);border:1px solid rgba(214,166,64,.4);border-radius:var(--r-md);padding:30px 24px 26px;transition:transform .3s cubic-bezier(.2,.8,.2,1),background .3s ease,border-color .3s ease;}
+.mem-card:hover{transform:perspective(900px) translateY(-5px) rotateX(2deg);background:rgba(255,255,255,.09);border-color:var(--orange);}
+.mem-num{font-family:'Montserrat',sans-serif;font-weight:900;font-size:2.3rem;color:var(--orange);line-height:1;margin-bottom:14px;}
+.mem-card h3{color:#fff;font-size:1.1rem;font-weight:800;}
+.mem-card .dept-bn{color:var(--orange-lt);}
+.mem-card p{color:#C3CEDF;font-size:.9rem;line-height:1.65;}
+.mem-cta{text-align:center;margin-top:38px;}
+.grp-block{margin-bottom:38px;}
+.grp-title{display:flex;align-items:baseline;gap:12px;font-size:1.05rem;font-weight:800;color:var(--ink);margin-bottom:16px;}
+.grp-title::after{content:"";flex:1;height:1px;background:var(--gold-line);order:3;}
+.grp-title .dept-bn{margin:0;order:2;}
+@media(max-width:860px){.dept-grid,.mem-grid{grid-template-columns:1fr;}}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:860px){
+  nav{
+    display:flex;position:fixed;top:var(--hdr-h,69px);left:0;right:0;bottom:0;
+    background:radial-gradient(ellipse 700px 500px at 85% 0%,rgba(214,166,64,.14),transparent 60%),linear-gradient(165deg,var(--navy-dk),var(--navy) 130%);
+    flex-direction:column;align-items:stretch;justify-content:center;
+    padding:28px 26px 40px;gap:4px;overflow-y:auto;z-index:400;
+    opacity:0;visibility:hidden;transform:translateY(-14px);
+    transition:opacity .35s cubic-bezier(.2,.8,.2,1),transform .4s cubic-bezier(.2,.8,.2,1),visibility .35s;
+  }
+  nav.open{opacity:1;visibility:visible;transform:translateY(0);}
+  nav a{
+    padding:16px 16px;border-bottom:1px solid rgba(255,255,255,.1);border-radius:9px;
+    color:#fff;font-size:1.08rem;font-weight:700;
+    opacity:0;transform:translateX(-16px);
+    transition:opacity .4s ease,transform .4s ease,background .2s ease,color .2s ease;
+  }
+  nav a::after{display:none;}
+  nav a:hover,nav a:active{background:rgba(255,255,255,.08);color:var(--orange-lt);}
+  nav.open a{opacity:1;transform:translateX(0);}
+  nav.open a:nth-child(1){transition-delay:.08s;}
+  nav.open a:nth-child(2){transition-delay:.14s;}
+  nav.open a:nth-child(3){transition-delay:.2s;}
+  nav.open a:nth-child(4){transition-delay:.26s;}
+  nav.open a:nth-child(5){transition-delay:.32s;}
+  nav.open a:nth-child(6){transition-delay:.38s;}
+  .hamburger{display:flex;}
+  .hero-inner{grid-template-columns:1fr;}
+  .hero-visual{height:220px;order:-1;}
+  .stats-inner{grid-template-columns:repeat(2,1fr);}
+  .about-grid{grid-template-columns:1fr;}
+  .about-graphic{order:-1;max-width:280px;margin:0 auto;}
+  .prog-grid{grid-template-columns:1fr;}
+  .contact-grid{grid-template-columns:1fr;}
+  .form-grid{grid-template-columns:1fr;}
+  .foot-grid{grid-template-columns:1fr;gap:28px;}
+  .join-banner{padding:36px 26px;}
+  .join-actions{flex-shrink:1;width:100%;}
+  .join-actions .btn{flex:1 1 auto;}
+  header .btn-orange{white-space:nowrap;padding:10px 16px;}
+}
+
+/* ===== SPLASH / LOADING SCREEN ===== */
+#splash{
+  position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:34px;padding:24px;
+  background:radial-gradient(ellipse at 50% 45%,#12335E 0%,#0A2547 38%,#041629 100%);
+  transition:opacity .7s ease,visibility .7s ease;
+}
+#splash.done{opacity:0;visibility:hidden;}
+body.loading{overflow:hidden;}
+.sp-logo{position:relative;width:200px;height:200px;display:flex;align-items:center;justify-content:center;}
+.sp-logo::before{
+  content:"";position:absolute;inset:-30px;border-radius:50%;
+  background:radial-gradient(circle,rgba(214,166,64,.28) 0%,rgba(214,166,64,0) 68%);
+}
+.sp-disc{
+  position:relative;width:150px;height:150px;border-radius:50%;background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 0 4px rgba(214,166,64,.55),0 10px 30px rgba(0,0,0,.35);
+  animation:sp-breathe 2.6s ease-in-out infinite;
+}
+.sp-disc img{width:100%;height:100%;border-radius:50%;display:block;object-fit:contain;padding:7%;box-sizing:border-box;}
+.sp-ring{position:absolute;inset:0;width:100%;height:100%;}
+.sp-ring circle{fill:none;stroke-linecap:round;}
+.sp-ring .r1{stroke:#D6A640;stroke-width:3;stroke-dasharray:190 300;transform-origin:50% 50%;animation:sp-spin 2.4s linear infinite;}
+.sp-ring .r2{stroke:rgba(255,255,255,.3);stroke-width:2;stroke-dasharray:110 300;transform-origin:50% 50%;animation:sp-spin 3.8s linear infinite reverse;}
+.sp-name{
+  font-family:'Montserrat',sans-serif;font-weight:500;color:#E9EEF7;text-align:center;
+  font-size:clamp(.74rem,3.1vw,1rem);letter-spacing:.24em;text-transform:uppercase;
+}
+.sp-bar{width:min(255px,62vw);height:3px;border-radius:3px;background:rgba(255,255,255,.14);overflow:hidden;margin-top:-14px;}
+.sp-bar i{display:block;height:100%;width:0;background:#D6A640;border-radius:3px;transition:width .5s ease;}
+@keyframes sp-spin{to{transform:rotate(360deg);}}
+@keyframes sp-breathe{50%{transform:scale(1.04);}}
+@media (prefers-reduced-motion:reduce){
+  .sp-ring .r1,.sp-ring .r2,.sp-disc{animation:none;}
+}
+</style>
+</head>
+<body class="loading">
+<noscript><style>.hero-eyebrow,.hero h1,.hero-bn,.hero p,.hero-actions,.hero-visual,.reveal{opacity:1!important;transform:none!important;}#splash{display:none!important;}</style></noscript>
+
+<div id="splash" role="status" aria-live="polite" aria-label="Loading">
+  <div class="sp-logo">
+    <svg class="sp-ring" viewBox="0 0 170 170" aria-hidden="true">
+      <circle class="r2" cx="85" cy="85" r="80"/>
+      <circle class="r1" cx="85" cy="85" r="72"/>
+    </svg>
+    <div class="sp-disc">
+      <img src="logo.webp" loading="eager" decoding="async" alt="ATHAR Islamic Youth Forum logo" width="150" height="150">
+    </div>
+  </div>
+  <div class="sp-name">ATHAR Islamic Youth Forum</div>
+  <div class="sp-bar"><i id="sp-fill"></i></div>
+</div>
+
+
+<header>
+  <div class="hdr-inner">
+    <a class="brand" href="#top">
+      <img class="brand-mark" src="emblem.webp" alt="ATHAR emblem" width="44" height="44">
+      <span class="brand-text">ATHAR<small>Islamic Youth Forum</small></span>
+    </a>
+    <nav id="nav">
+      <a href="#about">About</a>
+      <a href="#departments">Departments</a>
+      <a href="team.html">Team</a>
+      <a href="programs.html">Programs</a>
+      <a href="#membership">Membership</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="#join" class="btn btn-orange">Join Us</a>
+      <button class="hamburger" id="hbtn" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow" id="c-hero-eyebrow">ATHAR Islamic Youth Forum (AIYF)</div>
+      <h1 id="c-hero-headline">Inspiring <em>Faith</em>, Building Character.</h1>
+      <div class="hero-bn" id="c-hero-bn">ঈমানের প্রেরণায়, চরিত্র গঠনে।</div>
+      <p id="c-hero-sub">A youth-led forum that brings young people together to learn the Quran and Sunnah, build strong character, and serve their communities.</p>
+      <div class="hero-actions">
+        <a href="#join" class="btn btn-orange">Become a Member</a>
+        <a href="programs.html" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3);">Explore Programs</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-logo">
+        <svg class="hero-logo-ring" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="110" cy="110" r="108" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="1.5"/>
+          <circle cx="110" cy="110" r="100" fill="none" stroke="var(--orange)" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="130 400"/>
+        </svg>
+        <div class="hero-logo-disc">
+          <img src="logo.webp" alt="ATHAR Islamic Youth Forum logo" loading="eager" decoding="async" width="300" height="300">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stats-inner reveal-stagger">
+    <div class="reveal"><div class="stat-num" id="c-stat1-num">6</div><div class="stat-label" id="c-stat1-label">Departments</div></div>
+    <div class="reveal"><div class="stat-num" id="c-stat2-num">3</div><div class="stat-label" id="c-stat2-label">Membership Levels</div></div>
+    <div class="reveal"><div class="stat-num" id="c-stat3-num">4</div><div class="stat-label" id="c-stat3-label">Program Tracks</div></div>
+    <div class="reveal"><div class="stat-num" id="c-stat4-num">2</div><div class="stat-label" id="c-stat4-label">Languages — Bangla &amp; English</div></div>
+  </div>
+</div>
+
+<section class="section" id="about" style="background:var(--bg-alt);border-bottom:1px solid var(--gold-line);">
+  <div class="wrap">
+    <div class="about-grid reveal-stagger">
+      <div class="reveal">
+        <div class="about-graphic">
+          <img src="logo.webp" alt="ATHAR Islamic Youth Forum logo" loading="lazy" decoding="async" width="360" height="360">
+        </div>
+      </div>
+      <div class="about-text reveal">
+        <div class="section-tag">Who We Are</div>
+        <h2 style="margin-bottom:20px;" id="c-about-title">Faith that shapes character. Youth that serve.</h2>
+        <p id="c-about-text1">ATHAR Islamic Youth Forum (AIYF) is a youth-led forum rooted in the Quran and Sunnah. “Athar” (أثر) means a lasting trace — the mark a person leaves behind. We help young people leave a good one, through sound knowledge, good character and service to others.</p>
+        <p id="c-about-text2">Our work spans Quran learning, study circles, youth development, community service and media, all guided by one aim: Inspiring Faith, Building Character.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="departments">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">Our Departments</div>
+      <h2>Six departments, one mission</h2>
+      <p>Every member can find a place to learn, to serve and to lead.</p>
+    </div>
+    <div class="dept-grid reveal-stagger" id="dept-grid"></div>
+  </div>
+</section>
+
+<section class="section mem-section" id="membership">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">Membership</div>
+      <h2>Find your place in ATHAR</h2>
+      <p>Three levels built around commitment — start where you are and grow as you go.</p>
+    </div>
+    <div class="mem-grid reveal-stagger" id="mem-grid"></div>
+    <div class="mem-cta reveal"><a href="#contact" class="btn btn-orange">Become a Member</a></div>
+  </div>
+</section>
+
+<section class="section" id="team">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">Our Structure</div>
+      <h2>Meet the team</h2>
+      <p>The people who guide, plan and serve, organised by role.</p>
+    </div>
+    <div class="team-grid reveal-stagger" id="team-grid">
+      <div class="skel-team"><div class="skel-avatar shimmer"></div><div class="skel-body"><div class="skel-line shimmer" style="width:55%;height:12px;"></div><div class="skel-line shimmer" style="width:35%;height:8px;"></div><div class="skel-line shimmer" style="width:92%;"></div></div></div>
+      <div class="skel-team"><div class="skel-avatar shimmer"></div><div class="skel-body"><div class="skel-line shimmer" style="width:55%;height:12px;"></div><div class="skel-line shimmer" style="width:35%;height:8px;"></div><div class="skel-line shimmer" style="width:92%;"></div></div></div>
+      <div class="skel-team"><div class="skel-avatar shimmer"></div><div class="skel-body"><div class="skel-line shimmer" style="width:55%;height:12px;"></div><div class="skel-line shimmer" style="width:35%;height:8px;"></div><div class="skel-line shimmer" style="width:92%;"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="network" style="background:var(--bg-alt);border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:none;">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">Our Network</div>
+      <h2>Affiliated pages</h2>
+      <p>ATHAR Islamic Youth Forum is the official hub — explore our partner &amp; branch pages below.</p>
+    </div>
+    <div class="team-grid reveal-stagger" id="network-grid"></div>
+  </div>
+</section>
+
+<section class="section" id="programs" style="border-top:1px solid var(--gold-line);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">Programs &amp; Events</div>
+      <h2>Learn, grow and serve with us</h2>
+      <p>Study circles, camps, competitions and community drives — pick what fits where you are.</p>
+    </div>
+    <div class="prog-grid reveal-stagger" id="prog-grid">
+      <div class="skel-card"><div class="skel-img shimmer"></div><div class="skel-body"><div class="skel-line shimmer" style="width:35%;height:8px;"></div><div class="skel-line shimmer" style="width:88%;"></div><div class="skel-line shimmer" style="width:64%;"></div></div></div>
+      <div class="skel-card"><div class="skel-img shimmer"></div><div class="skel-body"><div class="skel-line shimmer" style="width:35%;height:8px;"></div><div class="skel-line shimmer" style="width:88%;"></div><div class="skel-line shimmer" style="width:64%;"></div></div></div>
+      <div class="skel-card"><div class="skel-img shimmer"></div><div class="skel-body"><div class="skel-line shimmer" style="width:35%;height:8px;"></div><div class="skel-line shimmer" style="width:88%;"></div><div class="skel-line shimmer" style="width:64%;"></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="join">
+  <div class="wrap">
+    <div class="join-banner reveal">
+      <div>
+        <h2 id="c-join-title">Be part of something that outlasts you.</h2>
+        <p id="c-join-text">Membership is open to young people who want to learn, grow and serve. Join a study circle, volunteer in a department, or simply come along to our next program.</p>
+      </div>
+      <div class="join-actions">
+        <button class="btn btn-white" onclick="document.getElementById('contact').scrollIntoView()">Become a Member</button>
+        <button class="btn btn-outline" style="border-color:rgba(7,31,61,.3);" onclick="document.getElementById('contact').scrollIntoView()">Volunteer With Us</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact" style="padding-bottom:100px;">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">Get In Touch</div>
+      <h2>Have a question? Reach out.</h2>
+    </div>
+    <div class="contact-info reveal" style="max-width:420px;">
+      <h3>Reach us directly</h3>
+      <div class="contact-row">
+        <svg class="contact-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z" opacity="0"/><path d="M3 6l9 6 9-6M3 6h18v12H3z" stroke-linejoin="round"/></svg>
+        <div><strong>Email</strong><span id="c-contact-email">To be announced</span></div>
+      </div>
+      <div class="contact-row">
+        <svg class="contact-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.9.32 1.78.6 2.63a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.45-1.27a2 2 0 0 1 2.11-.45c.85.28 1.73.48 2.63.6A2 2 0 0 1 22 16.92z"/></svg>
+        <div><strong>Phone</strong><span id="c-contact-phone">To be announced</span></div>
+      </div>
+      <div class="contact-row">
+        <svg class="contact-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div><strong>Location</strong><span id="c-contact-location">Dhaka, Bangladesh</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">
+          <img class="brand-mark" src="emblem.webp" alt="ATHAR emblem" width="44" height="44">
+          <span>ATHAR<small>Islamic Youth Forum</small></span>
+        </div>
+        <p class="desc" id="c-footer-desc">ATHAR Islamic Youth Forum (AIYF) is a youth-led forum inspiring faith and building character through Quran learning, study circles, youth development and community service.</p>
+      </div>
+      <div>
+        <h4>Navigate</h4>
+        <nav>
+          <a href="#about">About</a>
+      <a href="#departments">Departments</a>
+          <a href="team.html">Team</a>
+          <a href="programs.html">Programs</a>
+          <a href="#membership">Membership</a>
+          <a href="#contact">Contact</a>
+          <a href="certificate.html">Get Certificate</a>
+          <a href="verify.html">Verify Certificate</a>
+        </nav>
+      </div>
+      <div>
+        <h4>Connect</h4>
+        <nav>
+          <a href="#" id="c-social-fb" target="_blank" rel="noopener">Facebook</a>
+          <a href="#" id="c-social-ig" target="_blank" rel="noopener">Instagram</a>
+          <a href="#" id="c-social-li" target="_blank" rel="noopener">LinkedIn</a>
+        </nav>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <p>© 2026 ATHAR Islamic Youth Forum (AIYF). All rights reserved.</p>
+      <p>Inspiring Faith, Building Character · ঈমানের প্রেরণায়, চরিত্র গঠনে।</p>
+    </div>
+  </div>
+</footer>
+
+<!-- PROGRAM DETAIL MODAL -->
+<div class="pg-modal-ov" id="pg-modal-ov" onclick="if(event.target===this)closeProgramModal()">
+  <div class="pg-modal">
+    <button class="pg-modal-close" onclick="closeProgramModal()">✕</button>
+    <div id="pg-modal-media"></div>
+    <div class="pg-modal-body">
+      <span class="prog-cat" id="pg-modal-cat"></span>
+      <h2 id="pg-modal-title"></h2>
+      <p id="pg-modal-desc"></p>
+      <button class="pg-join-btn" id="pg-modal-join-btn" onclick="openJoinForm()">🙋 Join This Program</button>
+    </div>
+  </div>
+</div>
+
+<!-- JOIN THIS PROGRAM FORM MODAL -->
+<div class="jf-modal-ov" id="jf-modal-ov" onclick="if(event.target===this)closeJoinForm()">
+  <div class="jf-modal">
+    <button class="jf-close" onclick="closeJoinForm()">✕</button>
+    <div id="jf-form-view">
+      <h3>Join <span id="jf-program-name"></span></h3>
+      <p class="jf-sub">Fill this in and we'll get back to you with next steps.</p>
+      <div class="jf-fg"><label>Full Name *</label><input id="jf-name" placeholder="Your name"></div>
+      <div class="jf-fg"><label>Email *</label><input id="jf-email" type="email" placeholder="you@email.com"></div>
+      <div id="jf-extra-fields"></div>
+      <button class="pg-join-btn" onclick="submitJoinForm()">Submit</button>
+    </div>
+    <div id="jf-success-view" class="jf-success" style="display:none;">
+      <div class="ri">✅</div>
+      <h3 style="margin-bottom:8px;">Jazakallahu khairan!</h3>
+      <p style="color:var(--muted);font-size:.9rem;">Thanks for signing up — we'll be in touch soon, in sha Allah.</p>
+      <p style="color:var(--muted);font-size:.82rem;margin-top:14px;">Once you finish the program, come back and <a href="certificate.html" style="color:var(--gold-ink);font-weight:600;">download your certificate</a> here.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// Splash screen: stays until BOTH Firestore loads (site text + programs) finish,
+// but never shorter than 1.6s (smooth) and never longer than 7s (safety net).
+(function(){
+  var fill=document.getElementById('sp-fill'), splash=document.getElementById('splash');
+  var start=Date.now(), pending=3, finished=false;
+  var pct=14; fill.style.width=pct+'%';
+  var tick=setInterval(function(){ pct+= (92-pct)*0.3; fill.style.width=pct+'%'; },180);
+  function finish(){
+    if(finished) return; finished=true; clearInterval(tick);
+    fill.style.width='100%';
+    setTimeout(function(){
+      splash.classList.add('done');
+      document.body.classList.remove('loading');
+      document.body.classList.add('loaded');
+      setTimeout(function(){ splash.remove(); },800);
+    },450);
+  }
+  function check(){
+    if(pending>0) return;
+    var wait=Math.max(0,650-(Date.now()-start));
+    setTimeout(finish,wait);
+  }
+  window.nynMark=function(){ pending--; check(); };
+  setTimeout(finish,4000);
+})();
+</script>
+
+<!-- TOAST -->
+<div class="jf-toast" id="toast"><span id="t-msg"></span></div>
+
+<!-- Firebase (for CMS content loaded from Admin panel) -->
+<script type="module" src="firebase-config.js"></script>
+<script src="data.js"></script>
+
+<!-- AI chat assistant widget (self-contained: adds its own button, panel & styles) -->
+<script src="chatbot.js"></script>
+
+<script>
+document.getElementById('hbtn').addEventListener('click', function(){
+  setNavOpen(!document.getElementById('nav').classList.contains('open'));
+});
+document.querySelectorAll('#nav a').forEach(a => a.addEventListener('click', () => setNavOpen(false)));
+function setNavOpen(open){
+  var hbtn = document.getElementById('hbtn');
+  var navEl = document.getElementById('nav');
+  var hdr = document.querySelector('header');
+  if (open && hdr) {
+    document.documentElement.style.setProperty('--hdr-h', hdr.offsetHeight + 'px');
+  }
+  navEl.classList.toggle('open', open);
+  hbtn.classList.toggle('open', open);
+  hbtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  document.body.classList.toggle('nav-open', open);
+}
+
+// Subtle header elevation once the page scrolls — a quiet premium touch, not a repaint on every frame.
+(function(){
+  const hdr = document.querySelector('header');
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      hdr.classList.toggle('scrolled', window.scrollY > 8);
+      ticking = false;
+    });
+  }, { passive: true });
+})();
+
+// Premium scroll-reveal + stat count-up engine. Defensive by design: if
+// IntersectionObserver isn't supported, or anything here fails, content
+// is still shown — never hidden because of a script error.
+(function(){
+  var supportsIO = 'IntersectionObserver' in window;
+  var io = supportsIO ? new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }) : null;
+
+  window.nynReveal = function(root){
+    try {
+      var scope = root || document;
+      var els = scope.querySelectorAll('.reveal:not(.nyn-seen)');
+      els.forEach(function(el){
+        el.classList.add('nyn-seen');
+        if (io) io.observe(el);
+        else el.classList.add('visible');
+      });
+    } catch (e) { /* never let this break the page */ }
+  };
+
+  // Safety net: whatever happens, don't leave content invisible for long.
+  setTimeout(function(){
+    document.querySelectorAll('.reveal:not(.visible)').forEach(function(el){
+      el.classList.add('visible');
+    });
+  }, 6000);
+
+  function countUp(el){
+    var raw = (el.textContent || '').trim();
+    var m = raw.match(/^(\d+)(.*)$/);
+    if (!m) return;
+    var target = parseInt(m[1], 10), suffix = m[2] || '', startT = null, dur = 1200;
+    function step(ts){
+      if (!startT) startT = ts;
+      var p = Math.min(1, (ts - startT) / dur);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased) + suffix;
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var statsStrip = document.querySelector('.stats-inner');
+  if (statsStrip && supportsIO) {
+    var counted = false;
+    var statIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting && !counted) {
+          counted = true;
+          statsStrip.querySelectorAll('.stat-num').forEach(countUp);
+          statIO.disconnect();
+        }
+      });
+    }, { threshold: 0.4 });
+    statIO.observe(statsStrip);
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){ window.nynReveal(); });
+})();
+
+// Pull admin-edited content from Firestore and overwrite the page's
+// hardcoded defaults wherever a value was actually saved. If Firestore
+// has nothing yet (or fails to load), the defaults already in the HTML
+// stay exactly as they are — the page never looks broken or empty.
+document.addEventListener('DOMContentLoaded', async () => {
+  await waitForFirebase();
+  const content = await loadSiteContent();
+  siteContent = content || {};
+  if (!content) { window.nynMark && window.nynMark(); return; }
+
+  const setText = (id, val) => {
+    if (val === undefined || val === null || val === '') return;
+    const el = document.getElementById(id);
+    if (el) el.textContent = val;
+  };
+  const setHref = (id, val) => {
+    if (!val) return;
+    const el = document.getElementById(id);
+    if (el) el.href = val;
+  };
+
+  setText('c-hero-eyebrow', content.hero?.eyebrow);
+  setText('c-hero-headline', content.hero?.headline);
+  setText('c-hero-sub', content.hero?.sub);
+  setText('c-hero-bn', content.hero?.bn);
+
+  (content.stats || []).forEach((s, i) => {
+    setText(`c-stat${i + 1}-num`, s?.num);
+    setText(`c-stat${i + 1}-label`, s?.label);
+  });
+
+  setText('c-about-title', content.about?.title);
+  setText('c-about-text1', content.about?.text1);
+  setText('c-about-text2', content.about?.text2);
+
+  setText('c-join-title', content.joinBanner?.title);
+  setText('c-join-text', content.joinBanner?.text);
+
+  setText('c-contact-email', content.contact?.email);
+  setText('c-contact-phone', content.contact?.phone);
+  setText('c-contact-location', content.contact?.location);
+
+  setHref('c-social-fb', content.social?.facebook);
+  setHref('c-social-ig', content.social?.instagram);
+  setHref('c-social-li', content.social?.linkedin);
+
+  setText('c-footer-desc', content.footerDesc);
+  window.nynMark && window.nynMark();
+});
+
+// Programs are a separate, unlimited-count collection (managed from
+// Admin → Manage Programs), rendered into a card grid here, TVBD-style:
+// image + status badge, category chip, title, clamped description, and
+// a "Read More" link that opens the full detail in a modal.
+let loadedPrograms = [];
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await waitForFirebase();
+  const all = await loadPrograms();
+  loadedPrograms = all.filter(p => p.status !== 'draft');
+  if (!loadedPrograms.length) loadedPrograms = ATHAR_DEFAULTS.programs.map((p, i) => ({ id: 'default-' + i, ...p }));
+  const grid = document.getElementById('prog-grid');
+
+  if (!loadedPrograms.length) {
+    grid.innerHTML = `<div class="prog-card"><div class="prog-body"><p>Programs and events will be announced here soon — check back!</p></div></div>`;
+    window.nynMark && window.nynMark();
+    return;
+  }
+
+  grid.innerHTML = loadedPrograms.map((p, i) => `
+    <div class="prog-card reveal" onclick="openProgramModal(${i})">
+      ${p.image ? `<img class="prog-img" src="${p.image}" alt="${p.title}" loading="lazy" decoding="async">` : `<div class="prog-img-ph">${progIcon(p.category)}</div>`}
+      <span class="prog-badge ${p.status || 'active'}">${p.status || 'active'}</span>
+      <div class="prog-body">
+        ${p.category ? `<span class="prog-cat">🏷️ ${p.category}</span>` : ''}
+        <h3>${p.title}</h3>
+        <p>${p.short || ''}</p>
+        <button class="prog-more">Read More</button>
+      </div>
+    </div>`).join('');
+  window.nynReveal && window.nynReveal(grid);
+  window.nynMark && window.nynMark();
+});
+
+
+// Departments + membership tiers: edited in Admin (stored in content/site),
+// with the built-in ATHAR defaults shown until something is saved there.
+document.addEventListener('DOMContentLoaded', async () => {
+  const render = (content) => {
+    const depts = (content && content.departments && content.departments.length) ? content.departments : ATHAR_DEFAULTS.departments;
+    const mems = (content && content.membership && content.membership.length) ? content.membership : ATHAR_DEFAULTS.membership;
+    const dg = document.getElementById('dept-grid'), mg = document.getElementById('mem-grid');
+    if (dg) { dg.innerHTML = renderInfoCards(depts, 'dept'); window.nynReveal && window.nynReveal(dg); }
+    if (mg) { mg.innerHTML = renderInfoCards(mems, 'mem'); window.nynReveal && window.nynReveal(mg); }
+  };
+  render(null);
+  await waitForFirebase();
+  const content = await loadSiteContent();
+  if (content) render(content);
+});
+
+// Team members — separate collection, managed from Admin → Team.
+document.addEventListener('DOMContentLoaded', async () => {
+  await waitForFirebase();
+  const all = await loadTeam();
+  const team = all.filter(t => t.status !== 'draft');
+  const grid = document.getElementById('team-grid');
+
+  grid.style.display = 'block';
+  grid.innerHTML = renderTeamGroups(team);
+  window.nynReveal && window.nynReveal(grid);
+  window.nynMark && window.nynMark();
+});
+
+// "Our Network" — admin-managed list of affiliated pages; section stays hidden until at least one is added.
+document.addEventListener('DOMContentLoaded', async () => {
+  await waitForFirebase();
+  const pages = await loadNetworkPages();
+  const section = document.getElementById('network');
+  const grid = document.getElementById('network-grid');
+  if (!pages.length) return;
+
+  section.style.display = '';
+  const initials = (name) => (name || '').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
+
+  grid.innerHTML = pages.map(p => `
+    <a class="team-card reveal" href="${p.url}" target="_blank" rel="noopener" style="text-decoration:none;cursor:pointer;">
+      ${p.logo ? `<img class="team-photo" src="${p.logo}" alt="${p.name}">` : `<div class="team-photo-ph">${initials(p.name)}</div>`}
+      <div class="team-info">
+        <h3>${p.name}</h3>
+        ${p.description ? `<p class="team-bio">${p.description}</p>` : ''}
+        <span class="team-role" style="margin-top:6px;display:inline-block;">Visit Page →</span>
+      </div>
+    </a>`).join('');
+  window.nynReveal && window.nynReveal(grid);
+});
+
+function openProgramModal(i) {
+  const p = loadedPrograms[i];
+  if (!p) return;
+  currentModalProgram = p;
+  document.getElementById('pg-modal-media').innerHTML = p.image
+    ? `<img class="pg-modal-img" src="${p.image}" alt="${p.title}">`
+    : `<div class="pg-modal-img-ph">${progIcon(p.category)}</div>`;
+  document.getElementById('pg-modal-cat').textContent = p.category ? `🏷️ ${p.category}` : '';
+  document.getElementById('pg-modal-cat').style.display = p.category ? 'inline-flex' : 'none';
+  document.getElementById('pg-modal-title').textContent = p.title;
+  document.getElementById('pg-modal-desc').textContent = p.full || p.short || '';
+  document.getElementById('pg-modal-ov').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProgramModal() {
+  document.getElementById('pg-modal-ov').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/*===== JOIN THIS PROGRAM =====*/
+let currentModalProgram = null;
+let siteContent = {};
+
+const DEFAULT_JOIN_FIELDS = [
+  { id: 'phone', label: 'Phone', type: 'tel', required: false },
+  { id: 'message', label: 'Message', type: 'textarea', required: false }
+];
+
+function toast(msg, isErr) {
+  const t = document.getElementById('toast');
+  if (!t) return alert(msg);
+  document.getElementById('t-msg').textContent = msg;
+  t.classList.toggle('err', !!isErr);
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function openJoinForm() {
+  if (!currentModalProgram) return;
+  document.getElementById('jf-program-name').textContent = currentModalProgram.title;
+  document.getElementById('jf-name').value = '';
+  document.getElementById('jf-email').value = '';
+
+  const fields = (siteContent.joinFormFields && siteContent.joinFormFields.length)
+    ? siteContent.joinFormFields
+    : DEFAULT_JOIN_FIELDS;
+
+  document.getElementById('jf-extra-fields').innerHTML = fields.map(f => {
+    const req = f.required ? ' *' : '';
+    if (f.type === 'textarea') {
+      return `<div class="jf-fg"><label>${f.label}${req}</label><textarea data-field-label="${f.label}" data-required="${!!f.required}"></textarea></div>`;
+    }
+    return `<div class="jf-fg"><label>${f.label}${req}</label><input type="${f.type || 'text'}" data-field-label="${f.label}" data-required="${!!f.required}"></div>`;
+  }).join('');
+
+  document.getElementById('jf-form-view').style.display = 'block';
+  document.getElementById('jf-success-view').style.display = 'none';
+  document.getElementById('jf-modal-ov').classList.add('open');
+}
+
+function closeJoinForm() {
+  document.getElementById('jf-modal-ov').classList.remove('open');
+}
+
+async function submitJoinForm() {
+  const name = document.getElementById('jf-name').value.trim();
+  const email = document.getElementById('jf-email').value.trim();
+
+  if (!name || !email) return toast("Name and email are required!", true);
+
+  // Collect the dynamic extra fields, checking required ones.
+  const fields = {};
+  const extraInputs = document.querySelectorAll('#jf-extra-fields [data-field-label]');
+  for (const el of extraInputs) {
+    const label = el.dataset.fieldLabel;
+    const val = el.value.trim();
+    if (el.dataset.required === 'true' && !val) {
+      return toast(`Please fill in "${label}"!`, true);
+    }
+    if (val) fields[label] = val;
+  }
+
+  const btn = document.querySelector('#jf-form-view .pg-join-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Submitting...'; }
+
+  const result = await addParticipant({
+    programId: currentModalProgram.id,
+    programTitle: currentModalProgram.title,
+    name, email, fields
+  });
+
+  if (btn) { btn.disabled = false; btn.textContent = 'Submit'; }
+
+  if (result.success) {
+    document.getElementById('jf-form-view').style.display = 'none';
+    document.getElementById('jf-success-view').style.display = 'block';
+  } else {
+    toast(result.error || "Something went wrong, please try again.", true);
+  }
+}
+</script>
+
+</body>
+</html>
