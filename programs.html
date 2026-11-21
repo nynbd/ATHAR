@@ -465,11 +465,12 @@ body.loading{overflow:hidden;}
     <nav id="nav">
       <div class="nav-top"><div class="nav-bism">بسم الله الرحمن الرحيم</div><div class="nav-sub">ATHAR Islamic Youth Forum</div><div class="nav-orn">✦</div></div>
       <a href="index.html">Home</a>
-      <a href="index.html#about">About</a>
-      <a href="index.html#departments">Departments</a>
+      <a href="about.html">About</a>
+      <a href="departments.html">Departments</a>
       <a href="index.html#membership">Membership</a>
       <a href="team.html">Team</a>
       <a href="programs.html">Programs</a>
+      <a href="verify.html">Verify Certificate</a>
       <a href="index.html#contact">Contact</a>
     
       <div class="nav-foot"><a href="index.html#join" class="btn btn-orange">Become a Member</a><div class="nav-bn">ঈমানের প্রেরণায়, চরিত্র গঠনে।</div></div>
@@ -515,8 +516,8 @@ body.loading{overflow:hidden;}
         <h4>Navigate</h4>
         <nav>
           <a href="index.html">Home</a>
-      <a href="index.html#about">About</a>
-      <a href="index.html#departments">Departments</a>
+      <a href="about.html">About</a>
+      <a href="departments.html">Departments</a>
           <a href="team.html">Team</a>
           <a href="programs.html">Programs</a>
           <a href="index.html#membership">Membership</a>
@@ -550,33 +551,10 @@ body.loading{overflow:hidden;}
       <span class="prog-cat" id="pg-modal-cat"></span>
       <h2 id="pg-modal-title"></h2>
       <p id="pg-modal-desc"></p>
-      <button class="pg-join-btn" id="pg-modal-join-btn" onclick="openJoinForm()">🙋 Join This Program</button>
+      <a class="pg-join-btn" id="pg-modal-join-btn" href="#" target="_blank" rel="noopener" style="display:none;text-decoration:none;">🙋 Join This Program</a>
     </div>
   </div>
 </div>
-
-
-<!-- JOIN THIS PROGRAM FORM MODAL -->
-<div class="jf-modal-ov" id="jf-modal-ov" onclick="if(event.target===this)closeJoinForm()">
-  <div class="jf-modal">
-    <button class="jf-close" onclick="closeJoinForm()">✕</button>
-    <div id="jf-form-view">
-      <h3>Join <span id="jf-program-name"></span></h3>
-      <p class="jf-sub">Fill this in and we'll get back to you with next steps.</p>
-      <div class="jf-fg"><label>Full Name *</label><input id="jf-name" placeholder="Your name"></div>
-      <div class="jf-fg"><label>Email *</label><input id="jf-email" type="email" placeholder="you@email.com"></div>
-      <div id="jf-extra-fields"></div>
-      <button class="pg-join-btn" onclick="submitJoinForm()">Submit</button>
-    </div>
-    <div id="jf-success-view" class="jf-success" style="display:none;">
-      <div class="ri">✅</div>
-      <h3 style="margin-bottom:8px;">Jazakallahu khairan!</h3>
-      <p style="color:var(--muted);font-size:.9rem;">Thanks for signing up — we'll be in touch soon, in sha Allah.</p>
-      <p style="color:var(--muted);font-size:.82rem;margin-top:14px;">Once you finish the program, come back and <a href="certificate.html" style="color:var(--gold-ink);font-weight:600;">download your certificate</a> here.</p>
-    </div>
-  </div>
-</div>
-
 
 
 <script>
@@ -613,8 +591,6 @@ body.loading{overflow:hidden;}
 <script type="module" src="firebase-config.js"></script>
 <script src="data.js"></script>
 
-<!-- AI chat assistant widget -->
-<script src="chatbot.js"></script>
 
 <script>
 document.getElementById('hbtn').addEventListener('click', function(){
@@ -801,7 +777,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   await waitForFirebase();
   const all = await loadPrograms();
   loadedPrograms = all.filter(p => p.status !== 'draft');
-  if (!loadedPrograms.length) loadedPrograms = ATHAR_DEFAULTS.programs.map((p, i) => ({ id: 'default-' + i, ...p }));
   const grid = document.getElementById('prog-grid');
 
   if (!loadedPrograms.length) {
@@ -830,7 +805,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 function openProgramModal(i) {
   const p = loadedPrograms[i];
   if (!p) return;
-  currentModalProgram = p;
   document.getElementById('pg-modal-media').innerHTML = p.image
     ? `<img class="pg-modal-img" src="${p.image}" alt="${p.title}">`
     : `<div class="pg-modal-img-ph">${progIcon(p.category)}</div>`;
@@ -838,6 +812,9 @@ function openProgramModal(i) {
   document.getElementById('pg-modal-cat').style.display = p.category ? 'inline-flex' : 'none';
   document.getElementById('pg-modal-title').textContent = p.title;
   document.getElementById('pg-modal-desc').textContent = p.full || p.short || '';
+  const jb = document.getElementById('pg-modal-join-btn');
+  const fu = safeFormUrl(p.formUrl);
+  if (jb) { jb.href = fu || '#'; jb.style.display = fu ? 'inline-flex' : 'none'; }
   document.getElementById('pg-modal-ov').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -847,89 +824,8 @@ function closeProgramModal() {
   document.body.style.overflow = '';
 }
 
-/*===== JOIN THIS PROGRAM =====*/
-let currentModalProgram = null;
-let siteContent = {};
-
-const DEFAULT_JOIN_FIELDS = [
-  { id: 'phone', label: 'Phone', type: 'tel', required: false },
-  { id: 'message', label: 'Message', type: 'textarea', required: false }
-];
-
-function toast(msg, isErr) {
-  const t = document.getElementById('toast');
-  if (!t) return alert(msg);
-  document.getElementById('t-msg').textContent = msg;
-  t.classList.toggle('err', !!isErr);
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-function openJoinForm() {
-  if (!currentModalProgram) return;
-  document.getElementById('jf-program-name').textContent = currentModalProgram.title;
-  document.getElementById('jf-name').value = '';
-  document.getElementById('jf-email').value = '';
-
-  const fields = (siteContent.joinFormFields && siteContent.joinFormFields.length)
-    ? siteContent.joinFormFields
-    : DEFAULT_JOIN_FIELDS;
-
-  document.getElementById('jf-extra-fields').innerHTML = fields.map(f => {
-    const req = f.required ? ' *' : '';
-    if (f.type === 'textarea') {
-      return `<div class="jf-fg"><label>${f.label}${req}</label><textarea data-field-label="${f.label}" data-required="${!!f.required}"></textarea></div>`;
-    }
-    return `<div class="jf-fg"><label>${f.label}${req}</label><input type="${f.type || 'text'}" data-field-label="${f.label}" data-required="${!!f.required}"></div>`;
-  }).join('');
-
-  document.getElementById('jf-form-view').style.display = 'block';
-  document.getElementById('jf-success-view').style.display = 'none';
-  document.getElementById('jf-modal-ov').classList.add('open');
-}
-
-function closeJoinForm() {
-  document.getElementById('jf-modal-ov').classList.remove('open');
-}
-
-async function submitJoinForm() {
-  const name = document.getElementById('jf-name').value.trim();
-  const email = document.getElementById('jf-email').value.trim();
-
-  if (!name || !email) return toast("Name and email are required!", true);
-
-  // Collect the dynamic extra fields, checking required ones.
-  const fields = {};
-  const extraInputs = document.querySelectorAll('#jf-extra-fields [data-field-label]');
-  for (const el of extraInputs) {
-    const label = el.dataset.fieldLabel;
-    const val = el.value.trim();
-    if (el.dataset.required === 'true' && !val) {
-      return toast(`Please fill in "${label}"!`, true);
-    }
-    if (val) fields[label] = val;
-  }
-
-  const btn = document.querySelector('#jf-form-view .pg-join-btn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Submitting...'; }
-
-  const result = await addParticipant({
-    programId: currentModalProgram.id,
-    programTitle: currentModalProgram.title,
-    name, email, fields
-  });
-
-  if (btn) { btn.disabled = false; btn.textContent = 'Submit'; }
-
-  if (result.success) {
-    document.getElementById('jf-form-view').style.display = 'none';
-    document.getElementById('jf-success-view').style.display = 'block';
-  } else {
-    toast(result.error || "Something went wrong, please try again.", true);
-  }
-}
-
 </script>
 
+<script src="premium.js" defer></script>
 </body>
 </html>

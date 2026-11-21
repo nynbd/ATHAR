@@ -473,14 +473,15 @@ body.loading{overflow:hidden;}
     <nav id="nav">
       <div class="nav-top"><div class="nav-bism">بسم الله الرحمن الرحيم</div><div class="nav-sub">ATHAR Islamic Youth Forum</div><div class="nav-orn">✦</div></div>
       <a href="#top">Home</a>
-      <a href="#about">About</a>
-      <a href="#departments">Departments</a>
+      <a href="about.html">About</a>
+      <a href="departments.html">Departments</a>
       <a href="#membership">Membership</a>
       <a href="team.html">Team</a>
       <a href="programs.html">Programs</a>
+      <a href="verify.html">Verify Certificate</a>
       <a href="#contact">Contact</a>
     
-      <div class="nav-foot"><a href="#join" class="btn btn-orange">Become a Member</a><div class="nav-bn">ঈমানের প্রেরণায়, চরিত্র গঠনে।</div></div>
+      <div class="nav-foot"><a href="#join" class="btn btn-orange js-member-form">Become a Member</a><div class="nav-bn">ঈমানের প্রেরণায়, চরিত্র গঠনে।</div></div>
     </nav>
     <div style="display:flex;align-items:center;gap:10px;">
       <a href="#join" class="btn btn-orange">Join Us</a>
@@ -499,7 +500,7 @@ body.loading{overflow:hidden;}
       <div class="hero-bn" id="c-hero-bn">ঈমানের প্রেরণায়, চরিত্র গঠনে।</div>
       <p id="c-hero-sub">A youth-led forum that brings young people together to learn the Quran and Sunnah, build strong character, and serve their communities.</p>
       <div class="hero-actions">
-        <a href="#join" class="btn btn-orange">Become a Member</a>
+        <a href="#join" class="btn btn-orange js-member-form">Become a Member</a>
         <a href="programs.html" class="btn btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3);">Explore Programs</a>
       </div>
     </div>
@@ -526,6 +527,36 @@ body.loading{overflow:hidden;}
   </div>
 </div>
 
+<section class="section daily-sec" id="daily">
+  <div class="wrap daily-grid">
+    <div class="ayah-card reveal">
+      <div class="ayah-tag" id="ayah-tag">Ayah of the Day</div>
+      <div class="ayah-ar" id="ayah-ar" lang="ar" dir="rtl"></div>
+      <p class="ayah-tx" id="ayah-tx"></p>
+      <div class="ayah-ref" id="ayah-ref"></div>
+    </div>
+    <div class="prayer-card reveal">
+      <div class="pr-head">
+        <div><div class="pr-hijri" id="pr-hijri">…</div><div class="pr-greg" id="pr-greg"></div></div>
+        <div class="pr-city" id="pr-city"></div>
+      </div>
+      <div class="pr-next" id="pr-next"></div>
+      <div class="pr-grid" id="pr-grid"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="notices" style="display:none;background:var(--bg-alt);border-top:1px solid var(--gold-line);border-bottom:1px solid var(--gold-line);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-tag">Notice &amp; News</div>
+      <h2>নোটিশ ও সর্বশেষ খবর</h2>
+      <p>ATHAR-এর সর্বশেষ ঘোষণা ও আপডেট।</p>
+    </div>
+    <div class="notice-grid reveal-stagger" id="notice-grid"></div>
+  </div>
+</section>
+
 <section class="section" id="about" style="background:var(--bg-alt);border-bottom:1px solid var(--gold-line);">
   <div class="wrap">
     <div class="about-grid reveal-stagger">
@@ -537,8 +568,9 @@ body.loading{overflow:hidden;}
       <div class="about-text reveal">
         <div class="section-tag">Who We Are</div>
         <h2 style="margin-bottom:20px;" id="c-about-title">Faith that shapes character. Youth that serve.</h2>
-        <p id="c-about-text1">ATHAR Islamic Youth Forum (AIYF) is a youth-led forum rooted in the Quran and Sunnah. “Athar” (أثر) means a lasting trace — the mark a person leaves behind. We help young people leave a good one, through sound knowledge, good character and service to others.</p>
-        <p id="c-about-text2">Our work spans Quran learning, study circles, youth development, community service and media, all guided by one aim: Inspiring Faith, Building Character.</p>
+        <p id="c-about-text1" class="about-clamp">ATHAR Islamic Youth Forum (AIYF) is a youth-led forum rooted in the Quran and Sunnah. “Athar” (أثر) means a lasting trace — the mark a person leaves behind. We help young people leave a good one, through sound knowledge, good character and service to others.</p>
+        <p id="c-about-text2" style="display:none;">Our work spans Quran learning, study circles, youth development, community service and media, all guided by one aim: Inspiring Faith, Building Character.</p>
+        <a href="about.html" class="btn btn-orange" style="margin-top:22px;">আরও দেখুন →</a>
       </div>
     </div>
   </div>
@@ -552,6 +584,7 @@ body.loading{overflow:hidden;}
       <p>Every member can find a place to learn, to serve and to lead.</p>
     </div>
     <div class="dept-grid reveal-stagger" id="dept-grid"></div>
+    <div class="sec-more reveal"><a href="departments.html" class="btn btn-orange">আরও দেখুন →</a></div>
   </div>
 </section>
 
@@ -563,7 +596,7 @@ body.loading{overflow:hidden;}
       <p>Three levels built around commitment — start where you are and grow as you go.</p>
     </div>
     <div class="mem-grid reveal-stagger" id="mem-grid"></div>
-    <div class="mem-cta reveal"><a href="#contact" class="btn btn-orange">Become a Member</a></div>
+    <div class="mem-cta reveal"><a href="#contact" class="btn btn-orange js-member-form">Become a Member</a></div>
   </div>
 </section>
 
@@ -616,8 +649,8 @@ body.loading{overflow:hidden;}
         <p id="c-join-text">Membership is open to young people who want to learn, grow and serve. Join a study circle, volunteer in a department, or simply come along to our next program.</p>
       </div>
       <div class="join-actions">
-        <button class="btn btn-white" onclick="document.getElementById('contact').scrollIntoView()">Become a Member</button>
-        <button class="btn btn-outline" style="border-color:rgba(7,31,61,.3);" onclick="document.getElementById('contact').scrollIntoView()">Volunteer With Us</button>
+        <a class="btn btn-white js-member-form" href="#contact">Become a Member</a>
+        <a class="btn btn-outline js-volunteer-form" style="border-color:rgba(7,31,61,.3);" href="#contact">Volunteer With Us</a>
       </div>
     </div>
   </div>
@@ -662,8 +695,8 @@ body.loading{overflow:hidden;}
         <h4>Navigate</h4>
         <nav>
           <a href="#top">Home</a>
-      <a href="#about">About</a>
-      <a href="#departments">Departments</a>
+      <a href="about.html">About</a>
+      <a href="departments.html">Departments</a>
           <a href="team.html">Team</a>
           <a href="programs.html">Programs</a>
           <a href="#membership">Membership</a>
@@ -697,28 +730,7 @@ body.loading{overflow:hidden;}
       <span class="prog-cat" id="pg-modal-cat"></span>
       <h2 id="pg-modal-title"></h2>
       <p id="pg-modal-desc"></p>
-      <button class="pg-join-btn" id="pg-modal-join-btn" onclick="openJoinForm()">🙋 Join This Program</button>
-    </div>
-  </div>
-</div>
-
-<!-- JOIN THIS PROGRAM FORM MODAL -->
-<div class="jf-modal-ov" id="jf-modal-ov" onclick="if(event.target===this)closeJoinForm()">
-  <div class="jf-modal">
-    <button class="jf-close" onclick="closeJoinForm()">✕</button>
-    <div id="jf-form-view">
-      <h3>Join <span id="jf-program-name"></span></h3>
-      <p class="jf-sub">Fill this in and we'll get back to you with next steps.</p>
-      <div class="jf-fg"><label>Full Name *</label><input id="jf-name" placeholder="Your name"></div>
-      <div class="jf-fg"><label>Email *</label><input id="jf-email" type="email" placeholder="you@email.com"></div>
-      <div id="jf-extra-fields"></div>
-      <button class="pg-join-btn" onclick="submitJoinForm()">Submit</button>
-    </div>
-    <div id="jf-success-view" class="jf-success" style="display:none;">
-      <div class="ri">✅</div>
-      <h3 style="margin-bottom:8px;">Jazakallahu khairan!</h3>
-      <p style="color:var(--muted);font-size:.9rem;">Thanks for signing up — we'll be in touch soon, in sha Allah.</p>
-      <p style="color:var(--muted);font-size:.82rem;margin-top:14px;">Once you finish the program, come back and <a href="certificate.html" style="color:var(--gold-ink);font-weight:600;">download your certificate</a> here.</p>
+      <a class="pg-join-btn" id="pg-modal-join-btn" href="#" target="_blank" rel="noopener" style="display:none;text-decoration:none;">🙋 Join This Program</a>
     </div>
   </div>
 </div>
@@ -751,15 +763,13 @@ body.loading{overflow:hidden;}
 })();
 </script>
 
-<!-- TOAST -->
 <div class="jf-toast" id="toast"><span id="t-msg"></span></div>
 
 <!-- Firebase (for CMS content loaded from Admin panel) -->
 <script type="module" src="firebase-config.js"></script>
 <script src="data.js"></script>
+<script src="live.js"></script>
 
-<!-- AI chat assistant widget (self-contained: adds its own button, panel & styles) -->
-<script src="chatbot.js"></script>
 
 <script>
 document.getElementById('hbtn').addEventListener('click', function(){
@@ -943,11 +953,12 @@ document.addEventListener('DOMContentLoaded', async () => {
   await waitForFirebase();
   const all = await loadPrograms();
   loadedPrograms = all.filter(p => p.status !== 'draft');
-  if (!loadedPrograms.length) loadedPrograms = ATHAR_DEFAULTS.programs.map((p, i) => ({ id: 'default-' + i, ...p }));
   const grid = document.getElementById('prog-grid');
 
   if (!loadedPrograms.length) {
-    grid.innerHTML = `<div class="prog-card"><div class="prog-body"><p>Programs and events will be announced here soon — check back!</p></div></div>`;
+    // No programs/events added from Admin yet → hide the whole section on Home.
+    const sec = document.getElementById('programs');
+    if (sec) sec.style.display = 'none';
     window.atharMark && window.atharMark();
     return;
   }
@@ -975,7 +986,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const depts = (content && content.departments && content.departments.length) ? content.departments : ATHAR_DEFAULTS.departments;
     const mems = (content && content.membership && content.membership.length) ? content.membership : ATHAR_DEFAULTS.membership;
     const dg = document.getElementById('dept-grid'), mg = document.getElementById('mem-grid');
-    if (dg) { dg.innerHTML = renderInfoCards(depts, 'dept'); window.atharReveal && window.atharReveal(dg); }
+    if (dg) { dg.innerHTML = renderInfoCards(depts.slice(0, 3), 'dept'); window.atharReveal && window.atharReveal(dg); }
     if (mg) { mg.innerHTML = renderInfoCards(mems, 'mem'); window.atharReveal && window.atharReveal(mg); }
   };
   render(null);
@@ -1023,7 +1034,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 function openProgramModal(i) {
   const p = loadedPrograms[i];
   if (!p) return;
-  currentModalProgram = p;
   document.getElementById('pg-modal-media').innerHTML = p.image
     ? `<img class="pg-modal-img" src="${p.image}" alt="${p.title}">`
     : `<div class="pg-modal-img-ph">${progIcon(p.category)}</div>`;
@@ -1031,6 +1041,9 @@ function openProgramModal(i) {
   document.getElementById('pg-modal-cat').style.display = p.category ? 'inline-flex' : 'none';
   document.getElementById('pg-modal-title').textContent = p.title;
   document.getElementById('pg-modal-desc').textContent = p.full || p.short || '';
+  const jb = document.getElementById('pg-modal-join-btn');
+  const fu = safeFormUrl(p.formUrl);
+  if (jb) { jb.href = fu || '#'; jb.style.display = fu ? 'inline-flex' : 'none'; }
   document.getElementById('pg-modal-ov').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -1040,88 +1053,24 @@ function closeProgramModal() {
   document.body.style.overflow = '';
 }
 
-/*===== JOIN THIS PROGRAM =====*/
-let currentModalProgram = null;
-let siteContent = {};
-
-const DEFAULT_JOIN_FIELDS = [
-  { id: 'phone', label: 'Phone', type: 'tel', required: false },
-  { id: 'message', label: 'Message', type: 'textarea', required: false }
-];
-
-function toast(msg, isErr) {
-  const t = document.getElementById('toast');
-  if (!t) return alert(msg);
-  document.getElementById('t-msg').textContent = msg;
-  t.classList.toggle('err', !!isErr);
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-function openJoinForm() {
-  if (!currentModalProgram) return;
-  document.getElementById('jf-program-name').textContent = currentModalProgram.title;
-  document.getElementById('jf-name').value = '';
-  document.getElementById('jf-email').value = '';
-
-  const fields = (siteContent.joinFormFields && siteContent.joinFormFields.length)
-    ? siteContent.joinFormFields
-    : DEFAULT_JOIN_FIELDS;
-
-  document.getElementById('jf-extra-fields').innerHTML = fields.map(f => {
-    const req = f.required ? ' *' : '';
-    if (f.type === 'textarea') {
-      return `<div class="jf-fg"><label>${f.label}${req}</label><textarea data-field-label="${f.label}" data-required="${!!f.required}"></textarea></div>`;
-    }
-    return `<div class="jf-fg"><label>${f.label}${req}</label><input type="${f.type || 'text'}" data-field-label="${f.label}" data-required="${!!f.required}"></div>`;
-  }).join('');
-
-  document.getElementById('jf-form-view').style.display = 'block';
-  document.getElementById('jf-success-view').style.display = 'none';
-  document.getElementById('jf-modal-ov').classList.add('open');
-}
-
-function closeJoinForm() {
-  document.getElementById('jf-modal-ov').classList.remove('open');
-}
-
-async function submitJoinForm() {
-  const name = document.getElementById('jf-name').value.trim();
-  const email = document.getElementById('jf-email').value.trim();
-
-  if (!name || !email) return toast("Name and email are required!", true);
-
-  // Collect the dynamic extra fields, checking required ones.
-  const fields = {};
-  const extraInputs = document.querySelectorAll('#jf-extra-fields [data-field-label]');
-  for (const el of extraInputs) {
-    const label = el.dataset.fieldLabel;
-    const val = el.value.trim();
-    if (el.dataset.required === 'true' && !val) {
-      return toast(`Please fill in "${label}"!`, true);
-    }
-    if (val) fields[label] = val;
-  }
-
-  const btn = document.querySelector('#jf-form-view .pg-join-btn');
-  if (btn) { btn.disabled = true; btn.textContent = 'Submitting...'; }
-
-  const result = await addParticipant({
-    programId: currentModalProgram.id,
-    programTitle: currentModalProgram.title,
-    name, email, fields
-  });
-
-  if (btn) { btn.disabled = false; btn.textContent = 'Submit'; }
-
-  if (result.success) {
-    document.getElementById('jf-form-view').style.display = 'none';
-    document.getElementById('jf-success-view').style.display = 'block';
-  } else {
-    toast(result.error || "Something went wrong, please try again.", true);
-  }
-}
 </script>
 
+<script>
+// Google Form links (set in Admin → Site Info). Without a link, buttons keep their normal scroll behaviour.
+document.addEventListener('DOMContentLoaded', async () => {
+  await waitForFirebase();
+  const c = await loadSiteContent();
+  if (!c) return;
+  const apply = (sel, url) => {
+    url = safeFormUrl(url);
+    if (!url) return;
+    document.querySelectorAll(sel).forEach(a => { a.href = url; a.target = '_blank'; a.rel = 'noopener'; });
+  };
+  apply('.js-member-form', c.membershipFormUrl);
+  apply('.js-volunteer-form', c.volunteerFormUrl || c.membershipFormUrl);
+});
+</script>
+
+<script src="premium.js" defer></script>
 </body>
 </html>

@@ -185,6 +185,8 @@ textarea.fi{min-height:70px;resize:vertical;}
         <button class="adm-nb" data-sec="home-ed" onclick="goSec(this)"><span class="ico">🏠</span>Home Page</button>
         <button class="adm-nb" data-sec="dept-adm" onclick="goSec(this)"><span class="ico">🏛️</span>Departments</button>
         <button class="adm-nb" data-sec="mem-adm" onclick="goSec(this)"><span class="ico">🪪</span>Membership</button>
+        <button class="adm-nb" data-sec="notice-adm" onclick="goSec(this)"><span class="ico">📢</span>Notice &amp; News</button>
+        <button class="adm-nb" data-sec="daily-adm" onclick="goSec(this)"><span class="ico">🕌</span>Ayah &amp; Prayer Times</button>
         <button class="adm-nb" data-sec="prog-adm" onclick="goSec(this)"><span class="ico">📋</span>Programs &amp; Events</button>
         <button class="adm-nb" data-sec="team-adm" onclick="goSec(this)"><span class="ico">👥</span>Team</button>
         <button class="adm-nb" data-sec="network-adm" onclick="goSec(this)"><span class="ico">🌐</span>Our Network</button>
@@ -332,19 +334,66 @@ textarea.fi{min-height:70px;resize:vertical;}
       <!-- PARTICIPANTS -->
       <div class="adm-sec" id="part-adm">
         <div class="card" style="margin-bottom:18px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line);">
-            <h2 style="margin:0;padding:0;border:none;">📝 Join Form Fields</h2>
-            <button class="add-btn" onclick="addFormFieldRow()">+ Add Field</button>
-          </div>
-          <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px;">Name and Email always appear first and can't be removed. Add, remove, or relabel any extra question below — changes apply immediately on the live site.</p>
-          <div id="form-fields-list"></div>
-          <button class="save-btn" style="margin-top:6px;" onclick="saveFormFields()">💾 Save Form Fields</button>
+          <h2>📝 Google Form Links</h2>
+          <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px;">Paste your Google Form links. Leave empty to keep the button as a normal scroll-to-contact link. Program-specific links are added when you add/edit a program.</p>
+          <div class="fg"><label>Membership Form (Become a Member)</label><input class="fi" id="membership-form-url" placeholder="https://forms.gle/..."></div>
+          <div class="fg"><label>Volunteer Form (optional — uses Membership link if empty)</label><input class="fi" id="volunteer-form-url" placeholder="https://forms.gle/..."></div>
+          <button class="save-btn" style="margin-top:6px;" onclick="saveFormLinks()">💾 Save Form Links</button>
         </div>
         <div class="tbl-wrap">
           <table class="tbl">
             <thead><tr><th>Name</th><th>Program</th><th>Contact</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
             <tbody id="partbl-body"><tr class="empty-row"><td colspan="6">Loading...</td></tr></tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- NOTICE & NEWS -->
+      <div class="adm-sec" id="notice-adm">
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Date</th><th>Title</th><th>Link</th><th>Actions</th></tr></thead>
+            <tbody id="ntbl-body"><tr class="empty-row"><td colspan="4">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- DAILY AYAH + PRAYER TIMES -->
+      <div class="adm-sec" id="daily-adm">
+        <div class="card" style="margin-bottom:20px;">
+          <h2>📖 Daily Ayah / Hadith</h2>
+          <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px;">Shown on the Home page. Change it whenever you like — it stays until you change it again.</p>
+          <div class="row2">
+            <div class="fg"><label>Type</label><select class="fi" id="daily-type"><option value="ayah">Ayah (Quran)</option><option value="hadith">Hadith</option></select></div>
+            <div class="fg"><label>Reference</label><input class="fi" id="daily-ref" placeholder="e.g. সূরা আল-বাকারা ২:১৫২ / সহীহ বুখারী ১"></div>
+          </div>
+          <div class="fg"><label>Arabic text (optional)</label><textarea class="fi" id="daily-ar" dir="rtl" style="font-size:1.1rem;"></textarea></div>
+          <div class="fg"><label>Translation / meaning *</label><textarea class="fi" id="daily-tx" placeholder="বাংলা অনুবাদ"></textarea></div>
+          <button class="save-btn" onclick="saveDaily()">💾 Save Ayah / Hadith</button>
+        </div>
+        <div class="card">
+          <h2>🕌 Prayer Times &amp; Hijri Date</h2>
+          <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px;">Times are fetched automatically every day for the city below (Aladhan service). Needs internet on the visitor's side.</p>
+          <div class="row2">
+            <div class="fg"><label>City</label><input class="fi" id="pr-city-in" placeholder="Dhaka"></div>
+            <div class="fg"><label>Country</label><input class="fi" id="pr-country-in" placeholder="Bangladesh"></div>
+          </div>
+          <div class="row2">
+            <div class="fg"><label>Calculation method</label>
+              <select class="fi" id="pr-method-in">
+                <option value="1">University of Islamic Sciences, Karachi</option>
+                <option value="2">ISNA (North America)</option>
+                <option value="3">Muslim World League</option>
+                <option value="4">Umm Al-Qura, Makkah</option>
+                <option value="5">Egyptian General Authority</option>
+              </select></div>
+            <div class="fg"><label>Asr calculation</label>
+              <select class="fi" id="pr-school-in"><option value="1">Hanafi (later Asr)</option><option value="0">Shafi / Standard</option></select></div>
+          </div>
+          <div class="fg"><label>Hijri date adjustment (days)</label>
+            <select class="fi" id="pr-adj-in"><option value="-2">-2</option><option value="-1">-1</option><option value="0" selected>0</option><option value="1">+1</option><option value="2">+2</option></select>
+            <small style="color:var(--muted);font-size:.75rem;">Use this if the moon-sighting date in your country differs from the calculated one.</small></div>
+          <button class="save-btn" onclick="savePrayerSettings()">💾 Save Prayer Settings</button>
         </div>
       </div>
 
@@ -403,6 +452,7 @@ textarea.fi{min-height:70px;resize:vertical;}
         </select>
       </div>
     </div>
+    <div class="fg"><label>Google Form Link (optional)</label><input class="fi" id="p-formurl" placeholder="https://forms.gle/..."><small style="color:var(--muted);font-size:.75rem;">If added, a "Join This Program" button opens this Google Form.</small></div>
     <div class="fg"><label>Short Description *</label><textarea class="fi" id="p-short"></textarea></div>
     <div class="fg"><label>Full Description (optional)</label><textarea class="fi" id="p-full"></textarea></div>
     <div class="fg">
@@ -496,6 +546,52 @@ textarea.fi{min-height:70px;resize:vertical;}
 </div>
 
 <!-- EDIT PARTICIPANT MODAL -->
+<!-- NOTICE MODAL -->
+<div class="fm-ov" id="noticemodal" onclick="if(event.target===this)closeNoticeForm()">
+  <div class="fm">
+    <div class="fm-head"><h3 id="nmodal-title">Add Notice</h3><button onclick="closeNoticeForm()">✕</button></div>
+    <input type="hidden" id="n-id">
+    <div class="fg"><label>Title *</label><input class="fi" id="n-title" placeholder="e.g. নতুন কোরআন ক্লাস শুরু হচ্ছে"></div>
+    <div class="fg"><label>Date</label><input class="fi" id="n-date" type="date"></div>
+    <div class="fg"><label>Details</label><textarea class="fi" id="n-text"></textarea></div>
+    <div class="fg"><label>Link (optional)</label><input class="fi" id="n-link" placeholder="https://..."></div>
+    <div class="fm-foot">
+      <button class="fc-btn" onclick="closeNoticeForm()">Cancel</button>
+      <button class="fs-btn" onclick="saveNotice()">Save Notice</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD CERTIFICATE MODAL -->
+<div class="fm-ov" id="certmodal" onclick="if(event.target===this)closeCertForm()">
+  <div class="fm">
+    <div class="fm-head">
+      <h3>Add Certificate</h3>
+      <button onclick="closeCertForm()">✕</button>
+    </div>
+    <div id="cert-form-view">
+      <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px;">Issue a certificate directly — no sign-up needed. The person can download it on <strong>certificate.html</strong> using this email, and anyone can verify it on <strong>verify.html</strong>.</p>
+      <div class="fg"><label>Full Name *</label><input class="fi" id="cert-name" placeholder="Name as it should appear on the certificate"></div>
+      <div class="fg"><label>Email *</label><input class="fi" id="cert-email" type="email" placeholder="person@email.com"></div>
+      <div class="fg"><label>Program / Course *</label><input class="fi" id="cert-program" list="cert-program-list" placeholder="Pick a program or type a title"><datalist id="cert-program-list"></datalist></div>
+      <div class="fm-foot">
+        <button class="fc-btn" onclick="closeCertForm()">Cancel</button>
+        <button class="fs-btn" id="cert-save-btn" onclick="saveNewCertificate()">Issue Certificate</button>
+      </div>
+    </div>
+    <div id="cert-done-view" style="display:none;text-align:center;padding:10px 0;">
+      <div style="font-size:2.6rem;">🎓</div>
+      <h3 style="margin:8px 0 4px;">Certificate issued!</h3>
+      <p style="color:var(--muted);font-size:.85rem;">Certificate ID</p>
+      <p id="cert-done-id" style="font-family:monospace;font-size:1.15rem;font-weight:700;margin:4px 0 14px;user-select:all;"></p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <a class="fs-btn" id="cert-done-verify" href="#" target="_blank" rel="noopener" style="text-decoration:none;">Open verify page</a>
+        <button class="fc-btn" onclick="openCertForm()">+ Add another</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="fm-ov" id="partmodal" onclick="if(event.target===this)closePartForm()">
   <div class="fm">
     <div class="fm-head">

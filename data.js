@@ -438,26 +438,7 @@ const ATHAR_DEFAULTS = {
 
   programCategories: ["Quran & Learning", "Study Circle", "Youth Development", "Community Service", "Events & Competitions", "Other"],
 
-  programs: [
-    { title: "Weekly Quran Learning Circle", category: "Quran & Learning", status: "active",
-      short: "Learn to recite the Quran correctly with tajweed and reflect on its meaning together.",
-      full: "A weekly circle for beginners and regular readers. We work on correct recitation (tajweed), memorise short surahs and reflect on the meaning of what we recite, in small groups guided by a teacher.", image: "" },
-    { title: "Seerah & Islamic History Series", category: "Study Circle", status: "active",
-      short: "A study series on the life of Prophet Muhammad (peace be upon him) and the lessons it holds for young people today.",
-      full: "Each session takes one chapter of the Seerah or of early Islamic history and draws out lessons for our own character, choices and community. Open discussion and questions are encouraged.", image: "" },
-    { title: "Youth Character Camp", category: "Youth Development", status: "upcoming",
-      short: "A camp on akhlaq, discipline and teamwork, with workshops, activities and shared worship.",
-      full: "A camp that brings young members together for a program of workshops on good character, time and self-discipline, teamwork activities and congregational prayers.", image: "" },
-    { title: "Ramadan Quran Challenge", category: "Events & Competitions", status: "upcoming",
-      short: "A month-long recitation challenge and community iftar gatherings during Ramadan.",
-      full: "Set a personal Quran goal for the month, track it with your group and finish together. We also organise community iftar gatherings during Ramadan.", image: "" },
-    { title: "Islamic Quiz & Recitation Competition", category: "Events & Competitions", status: "upcoming",
-      short: "A friendly competition in Quran recitation, general Islamic knowledge and Seerah.",
-      full: "An open competition with recitation and quiz rounds for different age groups. Certificates are awarded to participants and prizes to the winners.", image: "" },
-    { title: "Community Service & Relief Drives", category: "Community Service", status: "active",
-      short: "Food, clothing and relief drives, run by our volunteers for families in need.",
-      full: "Our volunteers organise drives such as winter clothing, food distribution and emergency relief. Join a team to collect, pack and distribute, or help spread the word.", image: "" }
-  ]
+  programs: []
 };
 
 function progIcon(category) {
@@ -509,4 +490,11 @@ function renderTeamGroups(team) {
   return groups.filter(g => byKey[g.key].length).map(g =>
     `<div class="grp-block"><h3 class="grp-title">${escHtml(g.key)}<span class="dept-bn">${escHtml(g.bn)}</span></h3>
       <div class="team-grid">${byKey[g.key].map(teamCardHtml).join('')}</div></div>`).join('');
+}
+
+
+// Only allow http(s) links for Google Form URLs.
+function safeFormUrl(u) {
+  u = String(u || '').trim();
+  return /^https?:\/\//i.test(u) ? u : '';
 }

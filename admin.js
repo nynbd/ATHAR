@@ -97,6 +97,8 @@ function goSec(btn) {
     'home-ed': 'Home Page Editor',
     'dept-adm': 'Departments',
     'mem-adm': 'Membership',
+    'notice-adm': 'Notice & News',
+    'daily-adm': 'Ayah & Prayer Times',
     'prog-adm': 'Manage Programs & Events',
     'team-adm': 'Manage Team',
     'network-adm': 'Our Network',
@@ -112,6 +114,8 @@ function goSec(btn) {
   } else if (secId === 'dept-adm' || secId === 'mem-adm') {
     const k = secId === 'dept-adm' ? 'dept' : 'mem';
     actions.innerHTML = `<button class="add-btn" onclick="addInfoRow('${k}')">+ Add</button> <button class="save-btn" onclick="saveInfoList('${k}')">💾 Save</button>`;
+  } else if (secId === 'notice-adm') {
+    actions.innerHTML = `<button class="add-btn" onclick="openNoticeForm()">+ Add Notice</button>`;
   } else if (secId === 'prog-adm') {
     actions.innerHTML = `<button class="add-btn" onclick="openProgramForm()">+ Add Program</button>`;
   } else if (secId === 'team-adm') {
@@ -119,7 +123,7 @@ function goSec(btn) {
   } else if (secId === 'network-adm') {
     actions.innerHTML = `<button class="add-btn" onclick="openNetworkForm()">+ Add Page</button>`;
   } else if (secId === 'part-adm') {
-    actions.innerHTML = `<button class="save-btn" onclick="renderParticipantsTable()">🔄 Refresh</button> <button class="add-btn" onclick="syncCertificates()">🎓 Sync Certificates</button>`;
+    actions.innerHTML = `<button class="save-btn" onclick="renderParticipantsTable()">🔄 Refresh</button> <button class="add-btn" onclick="openCertForm()">+ Add Certificate</button> <button class="add-btn" onclick="syncCertificates()">🎓 Sync Certificates</button>`;
   } else if (secId === 'site-adm') {
     actions.innerHTML = `<button class="save-btn" onclick="saveSiteInfo()">💾 Save Changes</button>`;
   }
@@ -128,6 +132,8 @@ function goSec(btn) {
   // once at login — otherwise a submission made after login never shows
   // up until the admin manually reloads the whole page.
   if (secId === 'dept-adm' || secId === 'mem-adm') loadInfoLists();
+  if (secId === 'notice-adm') loadNoticesAdmin();
+  if (secId === 'daily-adm') loadDailySettings();
   if (secId === 'prog-adm') renderProgramsTable();
   if (secId === 'team-adm') renderTeamTable();
   if (secId === 'network-adm') renderNetworkTable();
@@ -263,6 +269,7 @@ function openProgramForm() {
   document.getElementById('p-category').value = 'Quran & Learning';
   document.getElementById('p-status').value = 'active';
   document.getElementById('p-short').value = '';
+  document.getElementById('p-formurl').value = '';
   document.getElementById('p-full').value = '';
   document.getElementById('p-image').value = '';
   document.getElementById('p-image-url').value = '';
@@ -279,6 +286,7 @@ function editProgram(id) {
   document.getElementById('p-category').value = p.category || 'Quran & Learning';
   document.getElementById('p-status').value = p.status || 'active';
   document.getElementById('p-short').value = p.short || '';
+  document.getElementById('p-formurl').value = p.formUrl || '';
   document.getElementById('p-full').value = p.full || '';
   document.getElementById('p-image').value = p.image || '';
   document.getElementById('p-image-url').value = p.image || '';
@@ -340,6 +348,7 @@ async function saveProgram() {
     category: document.getElementById('p-category').value,
     status: document.getElementById('p-status').value,
     short,
+    formUrl: document.getElementById('p-formurl').value.trim(),
     full: document.getElementById('p-full').value.trim(),
     image: document.getElementById('p-image').value.trim()
   };
@@ -381,77 +390,21 @@ async function deleteProgramAction(id) {
 }
 
 /*===== PARTICIPANTS ("Join This Program" submissions) =====*/
-let joinFormFields = [];
-let ffFieldCount = 0;
-
 async function loadFormFieldsIntoBuilder() {
   const content = await loadSiteContent();
-  joinFormFields = (content && content.joinFormFields) || [
-    { id: 'phone', label: 'Phone', type: 'tel', required: false },
-    { id: 'message', label: 'Message', type: 'textarea', required: false }
-  ];
-  renderFormFieldsBuilder();
+  const m = document.getElementById('membership-form-url');
+  const v = document.getElementById('volunteer-form-url');
+  if (m) m.value = (content && content.membershipFormUrl) || '';
+  if (v) v.value = (content && content.volunteerFormUrl) || '';
 }
 
-function renderFormFieldsBuilder() {
-  const list = document.getElementById('form-fields-list');
-  if (!list) return;
-  if (!joinFormFields.length) {
-    list.innerHTML = `<p style="color:var(--muted);font-size:.85rem;padding:6px 0;">No extra fields — the form will only ask for Name and Email. Click "+ Add Field" to add more.</p>`;
-    return;
-  }
-  list.innerHTML = joinFormFields.map((f, i) => `
-    <div class="ff-row" data-idx="${i}">
-      <input type="text" class="ff-label" value="${f.label}" placeholder="Field label, e.g. Phone">
-      <select class="ff-type">
-        <option value="text" ${f.type === 'text' ? 'selected' : ''}>Short text</option>
-        <option value="tel" ${f.type === 'tel' ? 'selected' : ''}>Phone</option>
-        <option value="email" ${f.type === 'email' ? 'selected' : ''}>Email</option>
-        <option value="number" ${f.type === 'number' ? 'selected' : ''}>Number</option>
-        <option value="textarea" ${f.type === 'textarea' ? 'selected' : ''}>Long text</option>
-      </select>
-      <label class="req"><input type="checkbox" class="ff-required" ${f.required ? 'checked' : ''}> Required</label>
-      <button class="ff-del" onclick="removeFormFieldRow(${i})">🗑</button>
-    </div>`).join('');
-}
-
-function addFormFieldRow() {
-  ffFieldCount++;
-  joinFormFields.push({ id: 'f' + Date.now() + ffFieldCount, label: '', type: 'text', required: false });
-  renderFormFieldsBuilder();
-}
-
-function removeFormFieldRow(i) {
-  joinFormFields.splice(i, 1);
-  renderFormFieldsBuilder();
-}
-
-async function saveFormFields() {
-  // Read whatever is currently in the DOM rows back into joinFormFields
-  // (preserving each field's id) before saving.
-  const rows = document.querySelectorAll('#form-fields-list .ff-row');
-  const updated = [];
-  rows.forEach(row => {
-    const idx = Number(row.dataset.idx);
-    const original = joinFormFields[idx] || {};
-    const label = row.querySelector('.ff-label').value.trim();
-    if (!label) return; // skip empty rows
-    updated.push({
-      id: original.id || ('f' + Date.now() + idx),
-      label,
-      type: row.querySelector('.ff-type').value,
-      required: row.querySelector('.ff-required').checked
-    });
-  });
-  joinFormFields = updated;
-
-  const result = await saveSiteContent({ joinFormFields });
-  if (result.success) {
-    toast("Form fields saved! ✅");
-    renderFormFieldsBuilder();
-  } else {
-    toast(result.error || "Save failed!", true);
-  }
+async function saveFormLinks() {
+  const membershipFormUrl = document.getElementById('membership-form-url').value.trim();
+  const volunteerFormUrl = document.getElementById('volunteer-form-url').value.trim();
+  const bad = [membershipFormUrl, volunteerFormUrl].some(u => u && !/^https?:\/\//i.test(u));
+  if (bad) return toast("Links must start with https://", true);
+  const result = await saveSiteContent({ membershipFormUrl, volunteerFormUrl });
+  toast(result.success ? "Form links saved! ✅" : (result.error || "Save failed!"), !result.success);
 }
 
 async function renderParticipantsTable() {
@@ -891,4 +844,185 @@ async function seedAtharContent() {
   renderProgramsTable();
   renderTeamTable();
   populateForm();
+}
+
+
+/*===== ADD CERTIFICATE (manual, no sign-up needed) =====*/
+function openCertForm() {
+  document.getElementById('cert-name').value = '';
+  document.getElementById('cert-email').value = '';
+  document.getElementById('cert-program').value = '';
+  const dl = document.getElementById('cert-program-list');
+  dl.innerHTML = (typeof cachedPrograms !== 'undefined' ? cachedPrograms : []).map(p => `<option value="${escHtml(p.title)}"></option>`).join('');
+  document.getElementById('cert-form-view').style.display = 'block';
+  document.getElementById('cert-done-view').style.display = 'none';
+  document.getElementById('certmodal').classList.add('open');
+}
+
+function closeCertForm() {
+  document.getElementById('certmodal').classList.remove('open');
+}
+
+async function saveNewCertificate() {
+  const name = document.getElementById('cert-name').value.trim();
+  const email = document.getElementById('cert-email').value.trim();
+  const programTitle = document.getElementById('cert-program').value.trim();
+  if (!name || !email || !programTitle) return toast("Name, email and program are required!", true);
+  if (!/^\S+@\S+\.\S+$/.test(email)) return toast("Please enter a valid email.", true);
+
+  const btn = document.getElementById('cert-save-btn');
+  btn.disabled = true; btn.textContent = 'Issuing...';
+
+  // A participant record is created (status "completed") so it shows in the list like any other certificate.
+  const added = await addParticipant({ name, email, programTitle, programId: 'manual', fields: {}, status: 'completed', addedBy: 'admin' });
+  if (!added.success) {
+    btn.disabled = false; btn.textContent = 'Issue Certificate';
+    return toast(added.error || "Could not save!", true);
+  }
+  const issued = await issueCertificate({ id: added.id, name, email, programTitle });
+  if (!issued.success) {
+    await deleteParticipant(added.id);
+    btn.disabled = false; btn.textContent = 'Issue Certificate';
+    return toast("Certificate could not be issued: " + (issued.error || "error"), true);
+  }
+  await updateParticipant(added.id, { certId: issued.certId });
+
+  btn.disabled = false; btn.textContent = 'Issue Certificate';
+  document.getElementById('cert-done-id').textContent = issued.certId;
+  document.getElementById('cert-done-verify').href = 'verify.html?id=' + encodeURIComponent(issued.certId);
+  document.getElementById('cert-form-view').style.display = 'none';
+  document.getElementById('cert-done-view').style.display = 'block';
+  toast("Certificate " + issued.certId + " issued!");
+  renderParticipantsTable();
+}
+
+
+/*===== NOTICE & NEWS (stored in content/site → notices[]) =====*/
+let cachedNotices = [];
+
+async function loadNoticesAdmin() {
+  const body = document.getElementById('ntbl-body');
+  if (body) body.innerHTML = `<tr class="empty-row"><td colspan="4">Loading...</td></tr>`;
+  const c = await loadSiteContent();
+  cachedNotices = (c && Array.isArray(c.notices)) ? c.notices : [];
+  renderNoticesTable();
+}
+
+function renderNoticesTable() {
+  const body = document.getElementById('ntbl-body');
+  if (!body) return;
+  if (!cachedNotices.length) {
+    body.innerHTML = `<tr class="empty-row"><td colspan="4">No notices yet. Click "+ Add Notice" to publish one.</td></tr>`;
+    return;
+  }
+  const sorted = [...cachedNotices].sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+  body.innerHTML = sorted.map(n => `
+    <tr>
+      <td>${escHtml(n.date || '—')}</td>
+      <td><strong>${escHtml(n.title)}</strong></td>
+      <td>${n.link ? '🔗' : '—'}</td>
+      <td class="tbl-acts">
+        <button class="e-btn" onclick="openNoticeForm('${escHtml(n.id)}')">Edit</button>
+        <button class="d-btn" onclick="deleteNoticeAction('${escHtml(n.id)}')">Delete</button>
+      </td>
+    </tr>`).join('');
+}
+
+function openNoticeForm(id) {
+  const n = id ? cachedNotices.find(x => x.id === id) : null;
+  document.getElementById('nmodal-title').textContent = n ? 'Edit Notice' : 'Add Notice';
+  document.getElementById('n-id').value = n ? n.id : '';
+  document.getElementById('n-title').value = n ? (n.title || '') : '';
+  document.getElementById('n-date').value = n ? (n.date || '') : new Date().toISOString().slice(0, 10);
+  document.getElementById('n-text').value = n ? (n.text || '') : '';
+  document.getElementById('n-link').value = n ? (n.link || '') : '';
+  document.getElementById('noticemodal').classList.add('open');
+}
+
+function closeNoticeForm() {
+  document.getElementById('noticemodal').classList.remove('open');
+}
+
+async function saveNotice() {
+  const id = document.getElementById('n-id').value;
+  const title = document.getElementById('n-title').value.trim();
+  const link = document.getElementById('n-link').value.trim();
+  if (!title) return toast("Title is required!", true);
+  if (link && !/^https?:\/\//i.test(link)) return toast("Link must start with https://", true);
+  const item = {
+    id: id || ('n' + Date.now()),
+    title,
+    date: document.getElementById('n-date').value || new Date().toISOString().slice(0, 10),
+    text: document.getElementById('n-text').value.trim(),
+    link
+  };
+  // Re-read the latest list first so notices saved from another device aren't overwritten.
+  const c = await loadSiteContent();
+  let list = (c && Array.isArray(c.notices)) ? c.notices : [];
+  list = id ? list.map(x => x.id === id ? item : x) : [item, ...list];
+  const result = await saveSiteContent({ notices: list });
+  if (result.success) {
+    cachedNotices = list;
+    toast(id ? "Notice updated!" : "Notice published!");
+    closeNoticeForm();
+    renderNoticesTable();
+  } else {
+    toast(result.error || "Save failed!", true);
+  }
+}
+
+async function deleteNoticeAction(id) {
+  if (!confirm("Delete this notice?")) return;
+  const c = await loadSiteContent();
+  const list = ((c && Array.isArray(c.notices)) ? c.notices : []).filter(x => x.id !== id);
+  const result = await saveSiteContent({ notices: list });
+  if (result.success) {
+    cachedNotices = list;
+    toast("Deleted.");
+    renderNoticesTable();
+  } else {
+    toast(result.error || "Delete failed!", true);
+  }
+}
+
+/*===== DAILY AYAH / HADITH + PRAYER SETTINGS =====*/
+async function loadDailySettings() {
+  const c = await loadSiteContent();
+  const d = (c && c.daily) || {};
+  const p = (c && c.prayer) || {};
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+  set('daily-type', d.type || 'ayah');
+  set('daily-ref', d.reference || '');
+  set('daily-ar', d.arabic || '');
+  set('daily-tx', d.text || '');
+  set('pr-city-in', p.city || '');
+  set('pr-country-in', p.country || '');
+  set('pr-method-in', p.method || '1');
+  set('pr-school-in', p.school !== undefined ? p.school : '1');
+  set('pr-adj-in', p.adjustment !== undefined ? String(p.adjustment) : '0');
+}
+
+async function saveDaily() {
+  const text = document.getElementById('daily-tx').value.trim();
+  const arabic = document.getElementById('daily-ar').value.trim();
+  if (!text && !arabic) return toast("Add the Arabic text or the translation.", true);
+  const daily = {
+    type: document.getElementById('daily-type').value,
+    reference: document.getElementById('daily-ref').value.trim(),
+    arabic, text
+  };
+  const r = await saveSiteContent({ daily });
+  toast(r.success ? "Saved! ✅ Live on the Home page." : (r.error || "Save failed!"), !r.success);
+}
+
+async function savePrayerSettings() {
+  const prayer = {
+    city: document.getElementById('pr-city-in').value.trim() || 'Dhaka',
+    country: document.getElementById('pr-country-in').value.trim() || 'Bangladesh',
+    method: document.getElementById('pr-method-in').value,
+    school: document.getElementById('pr-school-in').value,
+    adjustment: parseInt(document.getElementById('pr-adj-in').value, 10) || 0
+  };
+  const r = await saveSiteContent({ prayer });
+  toast(r.success ? "Prayer settings saved! ✅" : (r.error || "Save failed!"), !r.success);
 }
