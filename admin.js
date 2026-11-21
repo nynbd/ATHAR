@@ -875,7 +875,7 @@ async function seedAtharContent() {
   const r = await saveSiteContent(content);
   if (!r.success) return toast(r.error || 'Could not save content.', true);
 
-  const replaceOld = confirm('Also DELETE all existing programs and team members (the old NYN ones) and start fresh with the ATHAR starter programs?\n\nOK = delete old ones and add the starter programs\nCancel = keep what exists and only add starter programs that are missing');
+  const replaceOld = confirm('Also DELETE all existing programs and team members (the old ones) and start fresh with the ATHAR starter programs?\n\nOK = delete old ones and add the starter programs\nCancel = keep what exists and only add starter programs that are missing');
   const existing = await loadPrograms();
   if (replaceOld) {
     for (const p of existing) await deleteProgram(p.id);

@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Inter:wght@400;500;600;700&family=Hind+Siliguri:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Inter:wght@400;500;600;700&family=Hind+Siliguri:wght@500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --navy:#071F3D;--navy-dk:#041629;--navy-lt:#12335E;
@@ -286,6 +286,8 @@ footer{background:var(--navy);color:#C3CEDF;padding:56px 0 26px;border-top:3px s
 .foot-brand span small{font-size:.54rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--orange-lt);margin-top:4px;}
 footer p.desc{font-size:.88rem;color:#8FA0BC;max-width:280px;}
 footer h4{color:var(--orange-lt);font-size:.85rem;font-weight:700;margin-bottom:14px;letter-spacing:.02em;}
+footer nav{display:flex;flex-direction:column;align-items:flex-start;gap:0;}
+footer nav a::after{display:none;}
 footer nav a{display:block;color:#B9C6DC;text-decoration:none;font-size:.88rem;padding:5px 0;}
 footer nav a:hover{color:var(--orange-lt);}
 .foot-bottom{border-top:1px solid rgba(214,166,64,.28);padding-top:22px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:.8rem;color:#7E90AC;}
@@ -319,33 +321,69 @@ footer nav a:hover{color:var(--orange-lt);}
 .grp-title .dept-bn{margin:0;order:2;}
 @media(max-width:860px){.dept-grid,.mem-grid{grid-template-columns:1fr;}}
 
-/* ===== RESPONSIVE ===== */
-@media(max-width:860px){
-  nav{
-    display:flex;position:fixed;top:var(--hdr-h,69px);left:0;right:0;bottom:0;
-    background:radial-gradient(ellipse 700px 500px at 85% 0%,rgba(214,166,64,.14),transparent 60%),linear-gradient(165deg,var(--navy-dk),var(--navy) 130%);
-    flex-direction:column;align-items:stretch;justify-content:center;
-    padding:28px 26px 40px;gap:4px;overflow-y:auto;z-index:400;
+
+/* ===== PREMIUM MENU ===== */
+#nav .nav-top,#nav .nav-foot{display:none;}
+#nav > a{padding:9px 12px;}
+#nav > a.active{color:#fff;background:rgba(214,166,64,.12);}
+#nav > a.active::after{transform:scaleX(1);}
+.hamburger{border:1.5px solid rgba(214,166,64,.5);border-radius:12px;padding:11px 10px;background:rgba(255,255,255,.04);transition:background .3s ease,border-color .3s ease;}
+.hamburger.open{background:var(--orange);border-color:var(--orange);}
+.hamburger.open span{background:#071F3D;}
+.hero-bism,.foot-bism,.sp-bism,.nav-bism{font-family:'Amiri','Noto Naskh Arabic',serif;color:var(--orange-lt);line-height:1.6;}
+.hero-bism{font-size:1.7rem;margin-bottom:6px;}
+.foot-bism{text-align:center;font-size:1.7rem;padding-bottom:26px;margin-bottom:34px;border-bottom:1px solid rgba(214,166,64,.25);}
+.sp-bism{font-size:1.4rem;margin-top:-4px;opacity:.92;}
+.section-tag::before{content:"\2726";color:var(--orange);margin-right:9px;font-size:.9em;}
+.about-graphic{border-radius:220px 220px 26px 26px!important;}
+
+@media(max-width:980px){
+  #nav{
+    display:flex;position:fixed;top:var(--hdr-h,69px);left:0;right:0;bottom:0;counter-reset:nl;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23D6A640' stroke-opacity='.09' stroke-width='1'%3E%3Crect x='18' y='18' width='36' height='36'/%3E%3Crect x='18' y='18' width='36' height='36' transform='rotate(45 36 36)'/%3E%3C/g%3E%3C/svg%3E"),radial-gradient(ellipse 700px 500px at 85% 0%,rgba(214,166,64,.16),transparent 60%),linear-gradient(165deg,var(--navy-dk),var(--navy) 130%);
+    flex-direction:column;align-items:stretch;justify-content:flex-start;
+    padding:22px 24px 30px;gap:2px;overflow-y:auto;z-index:400;
     opacity:0;visibility:hidden;transform:translateY(-14px);
     transition:opacity .35s cubic-bezier(.2,.8,.2,1),transform .4s cubic-bezier(.2,.8,.2,1),visibility .35s;
   }
-  nav.open{opacity:1;visibility:visible;transform:translateY(0);}
-  nav a{
-    padding:16px 16px;border-bottom:1px solid rgba(255,255,255,.1);border-radius:9px;
-    color:#fff;font-size:1.08rem;font-weight:700;
-    opacity:0;transform:translateX(-16px);
+  #nav.open{opacity:1;visibility:visible;transform:translateY(0);}
+  #nav .nav-top{display:block;text-align:center;padding:4px 0 14px;}
+  .nav-bism{font-size:1.8rem;}
+  .nav-sub{font-size:.66rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-top:2px;}
+  .nav-orn{display:flex;align-items:center;gap:12px;margin-top:14px;color:var(--orange);font-size:.8rem;}
+  .nav-orn::before,.nav-orn::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(214,166,64,.6));}
+  .nav-orn::after{background:linear-gradient(270deg,transparent,rgba(214,166,64,.6));}
+  #nav > a{
+    display:flex;align-items:center;gap:14px;padding:15px 14px;border-bottom:1px solid rgba(255,255,255,.09);border-radius:12px;
+    color:#fff;font-size:1.1rem;font-weight:700;
+    opacity:0;transform:translateX(-18px);
     transition:opacity .4s ease,transform .4s ease,background .2s ease,color .2s ease;
   }
-  nav a::after{display:none;}
-  nav a:hover,nav a:active{background:rgba(255,255,255,.08);color:var(--orange-lt);}
-  nav.open a{opacity:1;transform:translateX(0);}
-  nav.open a:nth-child(1){transition-delay:.08s;}
-  nav.open a:nth-child(2){transition-delay:.14s;}
-  nav.open a:nth-child(3){transition-delay:.2s;}
-  nav.open a:nth-child(4){transition-delay:.26s;}
-  nav.open a:nth-child(5){transition-delay:.32s;}
-  nav.open a:nth-child(6){transition-delay:.38s;}
+  #nav > a::before{counter-increment:nl;content:counter(nl,decimal-leading-zero);font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.1em;color:var(--orange);min-width:22px;}
+  #nav > a::after{content:"\2192";position:static;left:auto;right:auto;bottom:auto;height:auto;width:auto;background:none;margin-left:auto;color:var(--orange);opacity:0;transform:translateX(-8px);transition:opacity .25s ease,transform .25s ease;}
+  #nav > a:hover,#nav > a:active{background:rgba(255,255,255,.07);color:var(--orange-lt);}
+  #nav > a:hover::after,#nav > a.active::after{opacity:1;transform:none;}
+  #nav > a.active{background:linear-gradient(90deg,rgba(214,166,64,.2),rgba(214,166,64,.03));color:var(--orange-lt);box-shadow:inset 3px 0 0 var(--orange);}
+  #nav.open > a{opacity:1;transform:none;}
+  #nav.open > a:nth-of-type(1){transition-delay:.06s;}
+  #nav.open > a:nth-of-type(2){transition-delay:.11s;}
+  #nav.open > a:nth-of-type(3){transition-delay:.16s;}
+  #nav.open > a:nth-of-type(4){transition-delay:.21s;}
+  #nav.open > a:nth-of-type(5){transition-delay:.26s;}
+  #nav.open > a:nth-of-type(6){transition-delay:.31s;}
+  #nav.open > a:nth-of-type(7){transition-delay:.36s;}
+  #nav .nav-foot{display:block;margin-top:auto;padding-top:26px;text-align:center;}
+  #nav .nav-foot .btn{width:100%;justify-content:center;}
+  .nav-bn{font-family:'Hind Siliguri','Inter',sans-serif;color:var(--orange-lt);font-size:.98rem;font-weight:600;margin-top:16px;}
   .hamburger{display:flex;}
+  header > .hdr-inner > div > .btn-orange{display:none;}
+}
+@media(max-width:1100px) and (min-width:981px){
+  #nav > a{padding:9px 9px;font-size:.88rem;}
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:860px){
   .hero-inner{grid-template-columns:1fr;}
   .hero-visual{height:220px;order:-1;}
   .stats-inner{grid-template-columns:repeat(2,1fr);}
@@ -424,6 +462,7 @@ body.loading{overflow:hidden;}
     </div>
   </div>
   <div class="sp-name">ATHAR Islamic Youth Forum</div>
+  <div class="sp-bism">بسم الله الرحمن الرحيم</div>
   <div class="sp-bar"><i id="sp-fill"></i></div>
 </div>
 
@@ -436,12 +475,16 @@ body.loading{overflow:hidden;}
       <span class="brand-text">ATHAR<small>Islamic Youth Forum</small></span>
     </a>
     <nav id="nav">
+      <div class="nav-top"><div class="nav-bism">بسم الله الرحمن الرحيم</div><div class="nav-sub">ATHAR Islamic Youth Forum</div><div class="nav-orn">✦</div></div>
+      <a href="index.html">Home</a>
       <a href="index.html#about">About</a>
       <a href="index.html#departments">Departments</a>
+      <a href="index.html#membership">Membership</a>
       <a href="team.html">Team</a>
       <a href="programs.html">Programs</a>
-      <a href="index.html#membership">Membership</a>
       <a href="index.html#contact">Contact</a>
+    
+      <div class="nav-foot"><a href="index.html#join" class="btn btn-orange">Become a Member</a><div class="nav-bn">ঈমানের প্রেরণায়, চরিত্র গঠনে।</div></div>
     </nav>
     <div style="display:flex;align-items:center;gap:10px;">
       <a href="index.html#join" class="btn btn-orange">Join Us</a>
@@ -474,6 +517,7 @@ body.loading{overflow:hidden;}
 
 <footer>
   <div class="wrap">
+    <div class="foot-bism">بسم الله الرحمن الرحيم</div>
     <div class="foot-grid">
       <div>
         <div class="foot-brand">
@@ -485,7 +529,8 @@ body.loading{overflow:hidden;}
       <div>
         <h4>Navigate</h4>
         <nav>
-          <a href="index.html#about">About</a>
+          <a href="index.html">Home</a>
+      <a href="index.html#about">About</a>
       <a href="index.html#departments">Departments</a>
           <a href="team.html">Team</a>
           <a href="programs.html">Programs</a>
@@ -534,7 +579,7 @@ body.loading{overflow:hidden;}
     var wait=Math.max(0,650-(Date.now()-start));
     setTimeout(finish,wait);
   }
-  window.nynMark=function(){ pending--; check(); };
+  window.atharMark=function(){ pending--; check(); };
   setTimeout(finish,4000);
 })();
 </script>
@@ -552,6 +597,31 @@ document.getElementById('hbtn').addEventListener('click', function(){
   setNavOpen(!document.getElementById('nav').classList.contains('open'));
 });
 document.querySelectorAll('#nav a').forEach(a => a.addEventListener('click', () => setNavOpen(false)));
+
+// Active menu link: current page, or (on the home page) the section being read.
+(function(){
+  var links = [].slice.call(document.querySelectorAll('#nav > a'));
+  var path = location.pathname.split('/').pop() || 'index.html';
+  var onIndex = (path === 'index.html');
+  function setActive(a){ links.forEach(function(l){ l.classList.toggle('active', l === a); }); }
+  if (!onIndex) {
+    links.forEach(function(l){ var h = l.getAttribute('href') || ''; if (h === path) l.classList.add('active'); });
+    return;
+  }
+  var map = { '#top':'top', '#about':'about', '#departments':'departments', '#membership':'membership', 'team.html':'team', 'programs.html':'programs', '#contact':'contact' };
+  var items = links.map(function(l){ var id = map[l.getAttribute('href')]; return { a: l, el: id && document.getElementById(id) }; }).filter(function(x){ return x.el; });
+  items.sort(function(x, y){ return (x.el.compareDocumentPosition(y.el) & 4) ? -1 : 1; });
+  var ticking = false;
+  function spy(){
+    ticking = false;
+    var cur = items[0];
+    for (var i = 0; i < items.length; i++) { if (items[i].el.getBoundingClientRect().top <= 130) cur = items[i]; }
+    if (window.innerHeight + window.scrollY >= document.body.scrollHeight - 4) cur = items[items.length - 1];
+    setActive(cur ? cur.a : null);
+  }
+  window.addEventListener('scroll', function(){ if (!ticking) { ticking = true; requestAnimationFrame(spy); } }, { passive: true });
+  spy();
+})();
 function setNavOpen(open){
   var hbtn = document.getElementById('hbtn');
   var navEl = document.getElementById('nav');
@@ -593,12 +663,12 @@ function setNavOpen(open){
     });
   }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }) : null;
 
-  window.nynReveal = function(root){
+  window.atharReveal = function(root){
     try {
       var scope = root || document;
-      var els = scope.querySelectorAll('.reveal:not(.nyn-seen)');
+      var els = scope.querySelectorAll('.reveal:not(.athar-seen)');
       els.forEach(function(el){
-        el.classList.add('nyn-seen');
+        el.classList.add('athar-seen');
         if (io) io.observe(el);
         else el.classList.add('visible');
       });
@@ -641,7 +711,7 @@ function setNavOpen(open){
     statIO.observe(statsStrip);
   }
 
-  document.addEventListener('DOMContentLoaded', function(){ window.nynReveal(); });
+  document.addEventListener('DOMContentLoaded', function(){ window.atharReveal(); });
 })();
 
 
@@ -654,7 +724,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await waitForFirebase();
   const content = await loadSiteContent();
   siteContent = content || {};
-  if (!content) { window.nynMark && window.nynMark(); return; }
+  if (!content) { window.atharMark && window.atharMark(); return; }
 
   const setText = (id, val) => {
     if (val === undefined || val === null || val === '') return;
@@ -692,7 +762,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setHref('c-social-li', content.social?.linkedin);
 
   setText('c-footer-desc', content.footerDesc);
-  window.nynMark && window.nynMark();
+  window.atharMark && window.atharMark();
 });
 
 

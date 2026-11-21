@@ -1258,7 +1258,7 @@ module.exports = QRCode;
 
 };
 var QRCode=__req('index');
-window.NYNQR={matrix:function(text){
+window.ATHARQR={matrix:function(text){
   var q=new QRCode(-1,0);q.addData(text);q.make();
   var n=q.getModuleCount(),m=[];
   for(var r=0;r<n;r++){m.push([]);for(var c=0;c<n;c++)m[r].push(q.isDark(r,c));}

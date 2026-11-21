@@ -1,5 +1,5 @@
 /* ============================================================
-   NYN Chatbot — Cloudflare Worker proxy.
+   ATHAR Chatbot — Cloudflare Worker proxy.
    This runs on Cloudflare's servers, NOT in the browser. It is the
    only place the real Gemini API key is stored, so the key never
    appears in the website's code or in the GitHub repo.
@@ -7,7 +7,7 @@
    SETUP (do this once, from your phone, no app/CLI needed):
    1. Go to dash.cloudflare.com → sign up / log in (free).
    2. Left menu → "Workers & Pages" → "Create" → "Create Worker".
-   3. Give it any name (e.g. "nyn-chatbot") → "Deploy" (deploys a
+   3. Give it any name (e.g. "athar-chatbot") → "Deploy" (deploys a
       starter template first — that's fine, we'll replace it).
    4. Open the Worker → "Edit code". Select ALL the existing code
       and replace it with everything in THIS file. Tap "Deploy".
@@ -16,7 +16,7 @@
       (the one starting with AQ. or AIzaSy...) → mark it as
       "Secret" / encrypted → "Deploy".
    6. Copy the Worker's URL shown at the top (something like
-      https://nyn-chatbot.<your-subdomain>.workers.dev) and send
+      https://athar-chatbot.<your-subdomain>.workers.dev) and send
       it back — that's the only thing chatbot.js needs to know.
    ============================================================ */
 
