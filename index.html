@@ -437,6 +437,7 @@ body.loading{overflow:hidden;}
   .sp-ring .r1,.sp-ring .r2,.sp-disc{animation:none;}
 }
 </style>
+<link rel="stylesheet" href="premium.css">
 </head>
 <body class="loading">
 <noscript><style>.hero-bism,.hero-eyebrow,.hero h1,.hero-bn,.hero p,.hero-actions,.hero-visual,.reveal{opacity:1!important;transform:none!important;}#splash{display:none!important;}</style></noscript>
@@ -451,6 +452,12 @@ body.loading{overflow:hidden;}
       <img src="logo.webp" loading="eager" decoding="async" alt="ATHAR Islamic Youth Forum logo" width="150" height="150">
     </div>
   </div>
+  <div class="sp-salam">
+    <div class="ar">السلام عليكم ورحمة الله وبركاته</div>
+    <div class="en">Assalamu Alaikum</div>
+    <div class="bn">আসসালামু আলাইকুম — স্বাগতম</div>
+  </div>
+  <div class="sp-orn">✦</div>
   <div class="sp-name">ATHAR Islamic Youth Forum</div>
   <div class="sp-bism">بسم الله الرحمن الرحيم</div>
   <div class="sp-bar"><i id="sp-fill"></i></div>
@@ -486,6 +493,7 @@ body.loading{overflow:hidden;}
   <div class="hero-inner">
     <div>
       <div class="hero-bism">بسم الله الرحمن الرحيم</div>
+      <div class="hero-salam"><span class="ar">السلام عليكم ورحمة الله وبركاته</span><span class="tr">Assalamu Alaikum — আসসালামু আলাইকুম</span></div>
       <div class="hero-eyebrow" id="c-hero-eyebrow">ATHAR Islamic Youth Forum (AIYF)</div>
       <h1 id="c-hero-headline">Inspiring <em>Faith</em>, Building Character.</h1>
       <div class="hero-bn" id="c-hero-bn">ঈমানের প্রেরণায়, চরিত্র গঠনে।</div>
@@ -717,7 +725,7 @@ body.loading{overflow:hidden;}
 
 <script>
 // Splash screen: stays until BOTH Firestore loads (site text + programs) finish,
-// but never shorter than 1.6s (smooth) and never longer than 7s (safety net).
+// but never shorter than ~2.7s (smooth) and never longer than 7s (safety net).
 (function(){
   var fill=document.getElementById('sp-fill'), splash=document.getElementById('splash');
   var start=Date.now(), pending=3, finished=false;
@@ -735,11 +743,11 @@ body.loading{overflow:hidden;}
   }
   function check(){
     if(pending>0) return;
-    var wait=Math.max(0,650-(Date.now()-start));
+    var wait=Math.max(0,2300-(Date.now()-start));
     setTimeout(finish,wait);
   }
   window.atharMark=function(){ pending--; check(); };
-  setTimeout(finish,4000);
+  setTimeout(finish,5000);
 })();
 </script>
 
