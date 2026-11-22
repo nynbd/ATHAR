@@ -1034,6 +1034,7 @@ async function savePrayerSettings() {
 
 /*===== CERTIFICATE DESIGN (template + name/QR/ID placement) =====*/
 let _ctImg = null;
+let _ctDataUrl = '';
 const ctv = (id) => document.getElementById(id);
 
 function readCertTpl() {
@@ -1060,11 +1061,14 @@ async function loadCertDesign() {
   const c = await loadSiteContent();
   const t = c && c.certTemplate;
   fillCertForm(t);
-  _ctImg = null;
+  _ctImg = null; _ctDataUrl = '';
   if (t && t.url) {
     ctv('ct-status').textContent = 'Loading your design…';
-    try { _ctImg = await loadCertImage(t.url); ctv('ct-status').textContent = '✅ Design loaded.'; }
-    catch (e) { ctv('ct-status').textContent = '⚠️ The saved design image could not be loaded.'; }
+    try {
+      const src = /^https?:/i.test(t.url) ? t.url : await loadCertDesignImage();
+      _ctImg = await loadCertImage(src);
+      ctv('ct-status').textContent = '✅ Design loaded.';
+    } catch (e) { ctv('ct-status').textContent = '⚠️ The saved design image could not be loaded. Please upload it again.'; }
   } else {
     ctv('ct-status').textContent = 'No design uploaded yet — the built-in certificate is being used.';
   }
@@ -1074,15 +1078,19 @@ async function loadCertDesign() {
 async function uploadCertDesign(input) {
   const file = input.files && input.files[0];
   if (!file) return;
-  if (file.size > 12 * 1024 * 1024) return toast("Image is too large (max 12 MB).", true);
-  ctv('ct-status').textContent = '⏳ Uploading…';
-  const r = await uploadToImgBB(file);   // original quality — no compression
+  ctv('ct-status').textContent = '⏳ Processing image…';
+  try {
+    const r = await fileToCertDataUrl(file);
+    _ctDataUrl = r.dataUrl;
+    _ctImg = await loadCertImage(r.dataUrl);
+    ctv('ct-url').value = 'firestore';
+    ctv('ct-status').textContent = '✅ Image ready (' + r.w + '×' + r.h + '). Place the name/QR/ID, then press Save.';
+    redrawCertPreview();
+  } catch (e) {
+    ctv('ct-status').textContent = '❌ ' + (e.message || 'Could not use this image.');
+    toast(e.message || "Could not use this image.", true);
+  }
   input.value = '';
-  if (!r.success) { ctv('ct-status').textContent = '❌ Upload failed.'; return toast("Upload failed!", true); }
-  ctv('ct-url').value = r.url;
-  try { _ctImg = await loadCertImage(r.url); ctv('ct-status').textContent = '✅ Uploaded. Place the name/QR/ID, then Save.'; }
-  catch (e) { ctv('ct-status').textContent = '⚠️ Uploaded, but the preview could not load.'; }
-  redrawCertPreview();
 }
 
 let _ctTimer = null;
@@ -1119,6 +1127,11 @@ document.addEventListener('click', (e) => {
 async function saveCertDesign() {
   const t = readCertTpl();
   if (!t.url) return toast("Upload your certificate design first.", true);
+  if (_ctDataUrl) {
+    const up = await saveCertDesignImage(_ctDataUrl);
+    if (!up.success) return toast("Could not save the image: " + (up.error || "error"), true);
+    _ctDataUrl = '';
+  }
   const r = await saveSiteContent({ certTemplate: t });
   toast(r.success ? "Certificate design saved! ✅" : (r.error || "Save failed!"), !r.success);
 }
@@ -1126,6 +1139,9 @@ async function saveCertDesign() {
 async function removeCertDesign() {
   if (!confirm("Remove your design and go back to the built-in certificate?")) return;
   const r = await saveSiteContent({ certTemplate: { url: '' } });
-  if (r.success) { toast("Removed."); _ctImg = null; fillCertForm({}); ctv('ct-status').textContent = 'Built-in certificate is being used.'; redrawCertPreview(); }
-  else toast(r.error || "Failed!", true);
+  if (r.success) {
+    await saveCertDesignImage('');
+    toast("Removed."); _ctImg = null; _ctDataUrl = ''; fillCertForm({});
+    ctv('ct-status').textContent = 'Built-in certificate is being used.'; redrawCertPreview();
+  } else toast(r.error || "Failed!", true);
 }

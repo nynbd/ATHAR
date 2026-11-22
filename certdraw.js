@@ -32,6 +32,33 @@
       img.src = url;
     });
   };
+  /* Reads a chosen image file and shrinks it until it fits in one Firestore field (about 900 KB).
+     Returns { dataUrl, w, h } — no third-party host is needed, so there are no CORS problems. */
+  window.fileToCertDataUrl = function (file) {
+    return new Promise(function (resolve, reject) {
+      var fr = new FileReader();
+      fr.onerror = function () { reject(new Error('Could not read the file')); };
+      fr.onload = function () {
+        var img = new Image();
+        img.onerror = function () { reject(new Error('This file is not a valid image')); };
+        img.onload = function () {
+          var widths = [2000, 1800, 1600, 1400, 1200, 1000], quals = [0.92, 0.85, 0.78, 0.7, 0.6];
+          for (var wi = 0; wi < widths.length; wi++) {
+            var w = Math.min(img.naturalWidth, widths[wi]), h = Math.round(img.naturalHeight * (w / img.naturalWidth));
+            var cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+            var cx = cv.getContext('2d'); cx.fillStyle = '#ffffff'; cx.fillRect(0, 0, w, h); cx.drawImage(img, 0, 0, w, h);
+            for (var qi = 0; qi < quals.length; qi++) {
+              var d = cv.toDataURL('image/jpeg', quals[qi]);
+              if (d.length <= 900000) { resolve({ dataUrl: d, w: w, h: h }); return; }
+            }
+          }
+          reject(new Error('The image is too detailed to store. Please use a smaller or simpler image.'));
+        };
+        img.src = fr.result;
+      };
+      fr.readAsDataURL(file);
+    });
+  };
   async function ensureFont(weight, family, text) {
     try { if (document.fonts && document.fonts.load) { await document.fonts.load(weight + ' 40px ' + family, text || 'Ab'); } } catch (e) {}
   }

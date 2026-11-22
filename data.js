@@ -498,3 +498,29 @@ function safeFormUrl(u) {
   u = String(u || '').trim();
   return /^https?:\/\//i.test(u) ? u : '';
 }
+
+
+/*===== Certificate design image (kept in Firestore: content/certDesign) =====*/
+async function loadCertDesignImage() {
+  await waitForFirebase();
+  const { doc, getDoc } = window.firebaseFunctions;
+  try {
+    const snap = await getDoc(doc(window.firebaseDB, "content", "certDesign"));
+    return snap.exists() ? (snap.data().dataUrl || '') : '';
+  } catch (err) {
+    console.error("Load certificate design error:", err);
+    return '';
+  }
+}
+
+async function saveCertDesignImage(dataUrl) {
+  await waitForFirebase();
+  const { doc, setDoc } = window.firebaseFunctions;
+  try {
+    await setDoc(doc(window.firebaseDB, "content", "certDesign"), { dataUrl: dataUrl || '', updatedAt: Date.now() });
+    return { success: true };
+  } catch (err) {
+    console.error("Save certificate design error:", err);
+    return { success: false, error: err.message };
+  }
+}

@@ -848,7 +848,9 @@ function getCertTemplate() {
         const content = await loadSiteContent();
         const t = content && content.certTemplate;
         if (!t || !t.url) return null;
-        const img = await loadCertImage(t.url);
+        let src = /^https?:/i.test(t.url) ? t.url : await loadCertDesignImage();
+        if (!src) return null;
+        const img = await loadCertImage(src);
         return { tpl: certMergeTpl(t), img };
       } catch (e) { console.error('Certificate template:', e); return null; }
     })();
