@@ -5,6 +5,22 @@
   function ready(fn){ if(document.readyState!=='loading') fn(); else document.addEventListener('DOMContentLoaded',fn); }
 
   ready(function(){
+    /* Dark / light toggle (saved in this browser; default follows the device setting) */
+    (function(){
+      var btn=document.createElement('button'); btn.id='theme-toggle'; btn.type='button';
+      function cur(){ var t=document.documentElement.getAttribute('data-theme'); if(t) return t; return (window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light'; }
+      function paint(){ var d=cur()==='dark'; btn.textContent=d?'☀️':'🌙'; btn.setAttribute('aria-label',d?'Switch to light mode':'Switch to dark mode'); btn.title=d?'Light mode':'Dark mode'; }
+      btn.addEventListener('click',function(){
+        var next=cur()==='dark'?'light':'dark';
+        document.documentElement.setAttribute('data-theme',next);
+        try{ localStorage.setItem('athar-theme',next); }catch(e){}
+        paint();
+      });
+      paint();
+      var hb=document.querySelector('header .hamburger');
+      if(hb && hb.parentNode) hb.parentNode.insertBefore(btn,hb); else { var hd=document.querySelector('header'); if(hd) hd.appendChild(btn); }
+    })();
+
     /* Scroll progress bar */
     var bar=document.createElement('div'); bar.id='scroll-progress'; document.body.appendChild(bar);
     /* Back to top */

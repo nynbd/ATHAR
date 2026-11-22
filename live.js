@@ -19,6 +19,12 @@
     var rf=$('ayah-ref'); if(rf){ rf.textContent=x.reference?('— '+x.reference):''; }
   }
 
+  function pickDaily(c){
+    var list=(c&&Array.isArray(c.dailyList))?c.dailyList.filter(function(x){return x&&(x.text||x.arabic);}):[];
+    if(list.length){ var d=new Date(); var day=Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000); return list[day%list.length]; }
+    return c&&c.daily;
+  }
+
   /* ---------- Hijri fallback (offline / API failure) ---------- */
   function hijriLocal(adj){
     try{
@@ -107,7 +113,7 @@
       await waitForFirebase();
       var c=await loadSiteContent();
       if(c){
-        renderDaily(c.daily);
+        renderDaily(pickDaily(c));
         if(c.prayer && (c.prayer.city||c.prayer.method||c.prayer.school||c.prayer.adjustment!==undefined)) loadPrayer(c.prayer);
         renderNotices(c.notices);
       }

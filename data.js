@@ -545,3 +545,30 @@ async function saveCertNames(names) {
     return { success: false, error: err.message };
   }
 }
+
+
+/*===== Participant certificate download counter (certDownloads/{hash of name}) =====*/
+async function trackCertDownload(name) {
+  try {
+    await waitForFirebase();
+    const { doc, getDoc, setDoc, updateDoc } = window.firebaseFunctions;
+    const db = window.firebaseDB;
+    const id = await sha256Hex(certNormName(name));
+    const ref = doc(db, "certDownloads", id);
+    const snap = await getDoc(ref);
+    if (snap.exists()) await updateDoc(ref, { count: (snap.data().count || 0) + 1, lastAt: Date.now() });
+    else await setDoc(ref, { name, count: 1, lastAt: Date.now() });
+  } catch (err) { console.warn("Download count not saved:", err.message); }
+}
+
+// Admin only. Returns { normalizedName: { count, lastAt } }
+async function loadCertDownloads() {
+  await waitForFirebase();
+  const { collection, getDocs } = window.firebaseFunctions;
+  const map = {};
+  try {
+    const snap = await getDocs(collection(window.firebaseDB, "certDownloads"));
+    snap.forEach(s => { const v = s.data(); map[certNormName(v.name)] = { count: v.count || 0, lastAt: v.lastAt || 0 }; });
+  } catch (err) { console.error("Load downloads error:", err); }
+  return map;
+}

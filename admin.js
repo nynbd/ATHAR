@@ -993,15 +993,21 @@ async function deleteNoticeAction(id) {
 }
 
 /*===== DAILY AYAH / HADITH + PRAYER SETTINGS =====*/
+let cachedDaily = [];
+
+function dailyDayIndex(len) {
+  const d = new Date();
+  return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000) % len;
+}
+
 async function loadDailySettings() {
   const c = await loadSiteContent();
-  const d = (c && c.daily) || {};
   const p = (c && c.prayer) || {};
+  cachedDaily = (c && Array.isArray(c.dailyList)) ? c.dailyList : [];
+  if (!cachedDaily.length && c && c.daily && (c.daily.text || c.daily.arabic)) cachedDaily = [{ id: 'd0', ...c.daily }];
+  resetDailyForm();
+  renderDailyList();
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
-  set('daily-type', d.type || 'ayah');
-  set('daily-ref', d.reference || '');
-  set('daily-ar', d.arabic || '');
-  set('daily-tx', d.text || '');
   set('pr-city-in', p.city || '');
   set('pr-country-in', p.country || '');
   set('pr-method-in', p.method || '1');
@@ -1009,18 +1015,82 @@ async function loadDailySettings() {
   set('pr-adj-in', p.adjustment !== undefined ? String(p.adjustment) : '0');
 }
 
-async function saveDaily() {
+function renderDailyList() {
+  const body = document.getElementById('dl-body');
+  if (!body) return;
+  const today = cachedDaily.length ? dailyDayIndex(cachedDaily.length) : -1;
+  document.getElementById('dl-today').textContent = cachedDaily.length ? "Today shows #" + (today + 1) + " of " + cachedDaily.length + "." : "";
+  if (!cachedDaily.length) {
+    body.innerHTML = `<tr class="empty-row"><td colspan="4">Nothing yet — the built-in ayah (94:6) is shown. Add yours above.</td></tr>`;
+    return;
+  }
+  body.innerHTML = cachedDaily.map((x, i) => {
+    const t = (x.text || x.arabic || '');
+    return `<tr${i === today ? ' style="background:rgba(214,166,64,.12);"' : ''}>
+      <td>${i + 1}${i === today ? ' ⭐' : ''}</td>
+      <td>${x.type === 'hadith' ? 'Hadith' : 'Ayah'}</td>
+      <td>${escHtml(t.length > 70 ? t.slice(0, 70) + '…' : t)}<div style="color:var(--muted);font-size:.75rem;">${escHtml(x.reference || '')}</div></td>
+      <td class="tbl-acts">
+        <button class="e-btn" onclick="moveDailyItem(${i},-1)">▲</button>
+        <button class="e-btn" onclick="moveDailyItem(${i},1)">▼</button>
+        <button class="e-btn" onclick="editDailyItem('${escHtml(x.id)}')">Edit</button>
+        <button class="d-btn" onclick="deleteDailyItem('${escHtml(x.id)}')">Delete</button>
+      </td></tr>`;
+  }).join('');
+}
+
+function resetDailyForm() {
+  ['daily-id', 'daily-ref', 'daily-ar', 'daily-tx'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  document.getElementById('daily-type').value = 'ayah';
+  document.getElementById('dl-save-btn').textContent = '➕ Add to list';
+  document.getElementById('dl-cancel').style.display = 'none';
+}
+
+function editDailyItem(id) {
+  const x = cachedDaily.find(v => v.id === id);
+  if (!x) return;
+  document.getElementById('daily-id').value = x.id;
+  document.getElementById('daily-type').value = x.type || 'ayah';
+  document.getElementById('daily-ref').value = x.reference || '';
+  document.getElementById('daily-ar').value = x.arabic || '';
+  document.getElementById('daily-tx').value = x.text || '';
+  document.getElementById('dl-save-btn').textContent = '💾 Save changes';
+  document.getElementById('dl-cancel').style.display = '';
+  document.getElementById('daily-tx').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+async function persistDaily(list, okMsg) {
+  const r = await saveSiteContent({ dailyList: list });
+  if (r.success) { cachedDaily = list; renderDailyList(); toast(okMsg); return true; }
+  toast(r.error || "Save failed!", true);
+  return false;
+}
+
+async function saveDailyItem() {
   const text = document.getElementById('daily-tx').value.trim();
   const arabic = document.getElementById('daily-ar').value.trim();
   if (!text && !arabic) return toast("Add the Arabic text or the translation.", true);
-  const daily = {
-    type: document.getElementById('daily-type').value,
-    reference: document.getElementById('daily-ref').value.trim(),
-    arabic, text
-  };
-  const r = await saveSiteContent({ daily });
-  toast(r.success ? "Saved! ✅ Live on the Home page." : (r.error || "Save failed!"), !r.success);
+  const id = document.getElementById('daily-id').value;
+  const item = { id: id || ('a' + Date.now()), type: document.getElementById('daily-type').value, reference: document.getElementById('daily-ref').value.trim(), arabic, text };
+  const c = await loadSiteContent();
+  let list = (c && Array.isArray(c.dailyList)) ? c.dailyList : cachedDaily;
+  list = id ? list.map(x => x.id === id ? item : x) : [...list, item];
+  if (await persistDaily(list, id ? "Updated! ✅" : "Added to the daily list ✅")) resetDailyForm();
 }
+
+async function deleteDailyItem(id) {
+  if (!confirm("Delete this ayah/hadith?")) return;
+  await persistDaily(cachedDaily.filter(x => x.id !== id), "Deleted.");
+}
+
+async function moveDailyItem(i, dir) {
+  const j2 = i + dir;
+  if (j2 < 0 || j2 >= cachedDaily.length) return;
+  const list = [...cachedDaily];
+  [list[i], list[j2]] = [list[j2], list[i]];
+  await persistDaily(list, "Order updated.");
+}
+
 
 async function savePrayerSettings() {
   const prayer = {
@@ -1178,10 +1248,14 @@ let cachedNames = [];
 
 async function loadCertNamesAdmin() {
   const body = document.getElementById('cn-body');
-  if (body) body.innerHTML = `<tr class="empty-row"><td colspan="2">Loading...</td></tr>`;
+  if (body) body.innerHTML = `<tr class="empty-row"><td colspan="3">Loading...</td></tr>`;
   try { cachedNames = await loadCertNames(); } catch (e) { cachedNames = []; toast("Could not load names.", true); }
   renderCertNames();
+  cachedDownloads = await loadCertDownloads();
+  renderCertNames();
 }
+
+let cachedDownloads = {};
 
 function renderCertNames() {
   const body = document.getElementById('cn-body');
@@ -1189,15 +1263,20 @@ function renderCertNames() {
   const q = certNormName(document.getElementById('cn-search').value);
   const rows = [];
   cachedNames.forEach((n, i) => { if (!q || certNormName(n).includes(q)) rows.push({ n, i }); });
-  document.getElementById('cn-count').textContent = 'Names (' + cachedNames.length + ' total' + (q ? ', ' + rows.length + ' shown' : '') + ')';
+  let people = 0, total = 0;
+  cachedNames.forEach(n => { const dl = cachedDownloads[certNormName(n)]; if (dl && dl.count) { people++; total += dl.count; } });
+  document.getElementById('cn-count').textContent = 'Names (' + cachedNames.length + ' total · ' + people + ' downloaded · ' + total + ' downloads)' + (q ? ' — ' + rows.length + ' shown' : '');
   if (!rows.length) {
-    body.innerHTML = `<tr class="empty-row"><td colspan="2">${cachedNames.length ? 'No match.' : 'No names yet. Add some above.'}</td></tr>`;
+    body.innerHTML = `<tr class="empty-row"><td colspan="3">${cachedNames.length ? 'No match.' : 'No names yet. Add some above.'}</td></tr>`;
     return;
   }
-  body.innerHTML = rows.slice(0, 300).map(r => `
-    <tr><td>${escHtml(r.n)}</td>
-    <td class="tbl-acts"><button class="d-btn" onclick="deleteCertName(${r.i})">Delete</button></td></tr>`).join('')
-    + (rows.length > 300 ? `<tr class="empty-row"><td colspan="2">Showing the first 300 — use search to narrow down.</td></tr>` : '');
+  body.innerHTML = rows.slice(0, 300).map(r => {
+    const dl = cachedDownloads[certNormName(r.n)];
+    const cell = dl && dl.count ? `<strong>${dl.count}</strong> <span style="color:var(--muted);font-size:.75rem;">(last ${new Date(dl.lastAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })})</span>` : '<span style="color:var(--muted);">—</span>';
+    return `<tr><td>${escHtml(r.n)}</td><td>${cell}</td>
+      <td class="tbl-acts"><button class="d-btn" onclick="deleteCertName(${r.i})">Delete</button></td></tr>`;
+  }).join('')
+    + (rows.length > 300 ? `<tr class="empty-row"><td colspan="3">Showing the first 300 — use search to narrow down.</td></tr>` : '');
 }
 
 async function addCertNames() {

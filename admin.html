@@ -364,14 +364,19 @@ textarea.fi{min-height:70px;resize:vertical;}
       <div class="adm-sec" id="daily-adm">
         <div class="card" style="margin-bottom:20px;">
           <h2>📖 Daily Ayah / Hadith</h2>
-          <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px;">Shown on the Home page. Change it whenever you like — it stays until you change it again.</p>
+          <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px;">Add as many as you like. The Home page shows <strong>one per day automatically</strong>, in the order below, and starts over after the last one. <span id="dl-today" style="font-weight:600;"></span></p>
+          <input type="hidden" id="daily-id">
           <div class="row2">
             <div class="fg"><label>Type</label><select class="fi" id="daily-type"><option value="ayah">Ayah (Quran)</option><option value="hadith">Hadith</option></select></div>
             <div class="fg"><label>Reference</label><input class="fi" id="daily-ref" placeholder="e.g. সূরা আল-বাকারা ২:১৫২ / সহীহ বুখারী ১"></div>
           </div>
           <div class="fg"><label>Arabic text (optional)</label><textarea class="fi" id="daily-ar" dir="rtl" style="font-size:1.1rem;"></textarea></div>
           <div class="fg"><label>Translation / meaning *</label><textarea class="fi" id="daily-tx" placeholder="বাংলা অনুবাদ"></textarea></div>
-          <button class="save-btn" onclick="saveDaily()">💾 Save Ayah / Hadith</button>
+          <button class="save-btn" id="dl-save-btn" onclick="saveDailyItem()">➕ Add to list</button>
+          <button class="add-btn" id="dl-cancel" style="display:none;margin-left:8px;" onclick="resetDailyForm()">Cancel edit</button>
+        </div>
+        <div class="card" style="margin-bottom:20px;">
+          <div class="tbl-wrap"><table class="tbl"><thead><tr><th>#</th><th>Type</th><th>Text</th><th>Actions</th></tr></thead><tbody id="dl-body"><tr class="empty-row"><td colspan="4">Loading...</td></tr></tbody></table></div>
         </div>
         <div class="card">
           <h2>🕌 Prayer Times &amp; Hijri Date</h2>
@@ -409,7 +414,7 @@ textarea.fi{min-height:70px;resize:vertical;}
         </div>
         <div class="card">
           <div class="fg"><label id="cn-count">Names</label><input class="fi" id="cn-search" placeholder="Search a name..." oninput="renderCertNames()"></div>
-          <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Name</th><th>Actions</th></tr></thead><tbody id="cn-body"><tr class="empty-row"><td colspan="2">Loading...</td></tr></tbody></table></div>
+          <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Name</th><th>Downloads</th><th>Actions</th></tr></thead><tbody id="cn-body"><tr class="empty-row"><td colspan="3">Loading...</td></tr></tbody></table></div>
         </div>
       </div>
 
