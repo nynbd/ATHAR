@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>Admin Panel — ATHAR Islamic Youth Forum</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Hind+Siliguri:wght@500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --navy:#071F3D;--navy-dk:#071F3D;--navy-lt:#1B3A6B;
@@ -193,6 +193,7 @@ textarea.fi{min-height:70px;resize:vertical;}
         <button class="adm-nb" data-sec="part-adm" onclick="goSec(this)"><span class="ico">🙋</span>Participants</button>
 
         <div class="adm-ns">Settings</div>
+        <button class="adm-nb" data-sec="cert-adm" onclick="goSec(this)"><span class="ico">🎓</span>Certificate Design</button>
         <button class="adm-nb" data-sec="site-adm" onclick="goSec(this)"><span class="ico">⚙️</span>Site Info</button>
       </nav>
       <div class="adm-sb-footer">
@@ -395,6 +396,66 @@ textarea.fi{min-height:70px;resize:vertical;}
             <small style="color:var(--muted);font-size:.75rem;">Use this if the moon-sighting date in your country differs from the calculated one.</small></div>
           <button class="save-btn" onclick="savePrayerSettings()">💾 Save Prayer Settings</button>
         </div>
+      </div>
+
+      <!-- CERTIFICATE DESIGN -->
+      <div class="adm-sec" id="cert-adm">
+        <div class="card" style="margin-bottom:18px;">
+          <h2>🎓 Certificate Design</h2>
+          <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px;">Upload your certificate design (JPG/PNG, leave the name area empty). The participant's name, a verify QR code and the certificate ID are written on it automatically. Then click on the preview to place each item.</p>
+          <input type="hidden" id="ct-url">
+          <div class="up-area" onclick="document.getElementById('ct-file').click()"><div style="font-size:1.6rem;">🖼️</div><div style="font-size:.85rem;">Click to upload your certificate design</div></div>
+          <input type="file" id="ct-file" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="uploadCertDesign(this)">
+          <p id="ct-status" style="font-size:.8rem;color:var(--muted);margin:8px 0 0;"></p>
+        </div>
+        <div class="card" style="margin-bottom:18px;">
+          <div class="fg"><label>Preview name (for testing only)</label><input class="fi" id="ct-sample" value="Abdullah Al Mamun" oninput="redrawCertPreview()"></div>
+          <div class="fg"><label>Click on the preview to place:</label>
+            <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:.88rem;">
+              <label><input type="radio" name="ct-target" value="name" checked> Name</label>
+              <label><input type="radio" name="ct-target" value="qr"> QR code</label>
+              <label><input type="radio" name="ct-target" value="id"> Certificate ID</label>
+            </div></div>
+          <canvas id="ct-canvas" width="1200" height="850" style="width:100%;height:auto;border:1px dashed var(--line);border-radius:10px;cursor:crosshair;background:#fafafa;"></canvas>
+        </div>
+        <div class="card" style="margin-bottom:18px;">
+          <h2>✍️ Name</h2>
+          <div class="row2">
+            <div class="fg"><label>Font</label><select class="fi" id="ct-nfont" onchange="redrawCertPreview()"><option value="montserrat">Montserrat (English)</option><option value="inter">Inter (English)</option><option value="amiri">Amiri (Serif)</option><option value="hind">Hind Siliguri (Bangla)</option></select></div>
+            <div class="fg"><label>Color</label><input class="fi" id="ct-ncolor" type="color" value="#071F3D" oninput="redrawCertPreview()" style="height:44px;padding:4px;"></div>
+          </div>
+          <div class="row2">
+            <div class="fg"><label>Size (% of width)</label><input class="fi" id="ct-nsize" type="number" step="0.1" min="1" max="15" value="5" oninput="redrawCertPreview()"></div>
+            <div class="fg"><label>Max width (% of width)</label><input class="fi" id="ct-nmaxw" type="number" min="20" max="100" value="80" oninput="redrawCertPreview()"></div>
+          </div>
+          <div class="row2">
+            <div class="fg"><label>Position X %</label><input class="fi" id="ct-nx" type="number" step="0.1" value="50" oninput="redrawCertPreview()"></div>
+            <div class="fg"><label>Position Y %</label><input class="fi" id="ct-ny" type="number" step="0.1" value="50" oninput="redrawCertPreview()"></div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:18px;">
+          <h2>🔳 Verify QR code</h2>
+          <label style="font-size:.88rem;"><input type="checkbox" id="ct-qon" checked onchange="redrawCertPreview()"> Show QR code</label>
+          <div class="row2" style="margin-top:10px;">
+            <div class="fg"><label>Size (% of width)</label><input class="fi" id="ct-qsize" type="number" step="0.5" min="4" max="30" value="11" oninput="redrawCertPreview()"></div>
+            <div class="fg"><label>Position X % / Y %</label>
+              <div style="display:flex;gap:8px;"><input class="fi" id="ct-qx" type="number" step="0.1" value="86" oninput="redrawCertPreview()"><input class="fi" id="ct-qy" type="number" step="0.1" value="80" oninput="redrawCertPreview()"></div></div>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:18px;">
+          <h2>🔖 Certificate ID text</h2>
+          <label style="font-size:.88rem;"><input type="checkbox" id="ct-ion" checked onchange="redrawCertPreview()"> Show certificate ID</label>
+          <div class="row2" style="margin-top:10px;">
+            <div class="fg"><label>Size (% of width)</label><input class="fi" id="ct-isize" type="number" step="0.1" min="0.6" max="4" value="1.3" oninput="redrawCertPreview()"></div>
+            <div class="fg"><label>Color</label><input class="fi" id="ct-icolor" type="color" value="#5B6472" oninput="redrawCertPreview()" style="height:44px;padding:4px;"></div>
+          </div>
+          <div class="row2">
+            <div class="fg"><label>Position X %</label><input class="fi" id="ct-ix" type="number" step="0.1" value="50" oninput="redrawCertPreview()"></div>
+            <div class="fg"><label>Position Y %</label><input class="fi" id="ct-iy" type="number" step="0.1" value="95" oninput="redrawCertPreview()"></div>
+          </div>
+        </div>
+        <button class="save-btn" onclick="saveCertDesign()">💾 Save Certificate Design</button>
+        <button class="add-btn" style="margin-left:8px;" onclick="removeCertDesign()">Remove design (use built-in)</button>
       </div>
 
       <!-- SITE INFO -->
@@ -624,6 +685,8 @@ textarea.fi{min-height:70px;resize:vertical;}
 
 <script type="module" src="firebase-config.js"></script>
 <script src="data.js"></script>
+<script src="qr.js"></script>
+<script src="certdraw.js"></script>
 <script src="admin.js"></script>
 </body>
 </html>

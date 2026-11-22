@@ -494,13 +494,9 @@ body.loading{overflow:hidden;}
 <section class="section" id="cert-lookup" style="padding-top:10px;">
   <div class="wrap" style="max-width:520px;">
     <div class="reveal" style="background:var(--bg);border:1px solid var(--line);border-radius:var(--r-md);padding:28px;box-shadow:0 1px 3px rgba(7,31,61,.05);">
-      <div class="field" style="margin-bottom:16px;">
-        <label>Full Name</label>
-        <input id="cert-name" placeholder="As you entered it when joining">
-      </div>
       <div class="field" style="margin-bottom:20px;">
-        <label>Email</label>
-        <input id="cert-email" type="email" placeholder="you@email.com">
+        <label>Your Email</label>
+        <input id="cert-email" type="email" placeholder="The email ATHAR has for you">
       </div>
       <button class="btn btn-orange" style="width:100%;" onclick="findCertificate()">🎓 Find My Certificate</button>
       <p id="cert-msg" style="margin-top:14px;font-size:.86rem;"></p>
@@ -592,6 +588,7 @@ body.loading{overflow:hidden;}
 <script type="module" src="firebase-config.js"></script>
 <script src="data.js"></script>
 <script src="qr.js"></script>
+<script src="certdraw.js"></script>
 
 
 <script>
@@ -773,7 +770,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 async function findCertificate() {
-  const nameInput = document.getElementById('cert-name').value.trim();
   const emailInput = document.getElementById('cert-email').value.trim().toLowerCase();
   const msg = document.getElementById('cert-msg');
   const resultBox = document.getElementById('cert-result');
@@ -781,8 +777,8 @@ async function findCertificate() {
   resultBox.style.display = 'none';
   switcher.style.display = 'none';
 
-  if (!nameInput || !emailInput) {
-    msg.textContent = 'Please enter both your name and email.';
+  if (!emailInput) {
+    msg.textContent = 'Please enter your email.';
     msg.style.color = '#c0392b';
     return;
   }
@@ -795,8 +791,7 @@ async function findCertificate() {
     const hash = await sha256Hex(emailHashInput(emailInput));
     const ids = await loadCertIndex(hash);
     const certs = await Promise.all(ids.map(id => loadCertificate(id)));
-    matches = certs.filter(c => c && !c.revoked &&
-      (c.name || '').trim().toLowerCase() === nameInput.toLowerCase());
+    matches = certs.filter(c => c && !c.revoked);
   } catch (err) {
     msg.textContent = 'Could not reach the certificate service. Please try again in a moment.';
     msg.style.color = '#c0392b';
@@ -804,7 +799,7 @@ async function findCertificate() {
   }
 
   if (!matches.length) {
-    msg.textContent = "No completed certificate found for that name & email yet. Still in progress? Check back once your program is marked complete.";
+    msg.textContent = "No certificate found for this email. Certificates are available only to participants listed by ATHAR. If you think this is a mistake, please contact us.";
     msg.style.color = '#c0392b';
     return;
   }
@@ -844,9 +839,40 @@ function fitFontSize(ctx, text, maxWidth, maxSize, minSize, weight, family) {
   return size;
 }
 
-function drawCertificate(p) {
+let _certTplPromise = null;
+function getCertTemplate() {
+  if (!_certTplPromise) {
+    _certTplPromise = (async () => {
+      try {
+        await waitForFirebase();
+        const content = await loadSiteContent();
+        const t = content && content.certTemplate;
+        if (!t || !t.url) return null;
+        const img = await loadCertImage(t.url);
+        return { tpl: certMergeTpl(t), img };
+      } catch (e) { console.error('Certificate template:', e); return null; }
+    })();
+  }
+  return _certTplPromise;
+}
+
+async function drawCertificate(p) {
   window._lastCert = p;
+  const t = await getCertTemplate();
+  if (t) {
+    const certId = p.certId || '';
+    const verifyUrl = new URL('verify.html?id=' + encodeURIComponent(certId), location.href).href;
+    const canvas = document.getElementById('cert-canvas');
+    await drawCertTemplate(canvas, t.img, t.tpl, { name: p.name || 'Member', certId, verifyUrl });
+    window._certFileName = 'ATHAR-Certificate-' + (p.name || 'Member').replace(/\s+/g, '-') + '.png';
+    return;
+  }
+  drawBuiltInCertificate(p);
+}
+
+function drawBuiltInCertificate(p) {
   const canvas = document.getElementById('cert-canvas');
+  canvas.width = 1200; canvas.height = 850;
   const ctx = canvas.getContext('2d');
   const W = canvas.width, H = canvas.height;
   const maxTextWidth = W - 220;

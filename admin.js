@@ -99,6 +99,7 @@ function goSec(btn) {
     'mem-adm': 'Membership',
     'notice-adm': 'Notice & News',
     'daily-adm': 'Ayah & Prayer Times',
+    'cert-adm': 'Certificate Design',
     'prog-adm': 'Manage Programs & Events',
     'team-adm': 'Manage Team',
     'network-adm': 'Our Network',
@@ -114,6 +115,8 @@ function goSec(btn) {
   } else if (secId === 'dept-adm' || secId === 'mem-adm') {
     const k = secId === 'dept-adm' ? 'dept' : 'mem';
     actions.innerHTML = `<button class="add-btn" onclick="addInfoRow('${k}')">+ Add</button> <button class="save-btn" onclick="saveInfoList('${k}')">💾 Save</button>`;
+  } else if (secId === 'cert-adm') {
+    actions.innerHTML = `<button class="save-btn" onclick="saveCertDesign()">💾 Save Design</button>`;
   } else if (secId === 'notice-adm') {
     actions.innerHTML = `<button class="add-btn" onclick="openNoticeForm()">+ Add Notice</button>`;
   } else if (secId === 'prog-adm') {
@@ -132,6 +135,7 @@ function goSec(btn) {
   // once at login — otherwise a submission made after login never shows
   // up until the admin manually reloads the whole page.
   if (secId === 'dept-adm' || secId === 'mem-adm') loadInfoLists();
+  if (secId === 'cert-adm') loadCertDesign();
   if (secId === 'notice-adm') loadNoticesAdmin();
   if (secId === 'daily-adm') loadDailySettings();
   if (secId === 'prog-adm') renderProgramsTable();
@@ -1025,4 +1029,103 @@ async function savePrayerSettings() {
   };
   const r = await saveSiteContent({ prayer });
   toast(r.success ? "Prayer settings saved! ✅" : (r.error || "Save failed!"), !r.success);
+}
+
+
+/*===== CERTIFICATE DESIGN (template + name/QR/ID placement) =====*/
+let _ctImg = null;
+const ctv = (id) => document.getElementById(id);
+
+function readCertTpl() {
+  const num = (id, d) => { const v = parseFloat(ctv(id).value); return isNaN(v) ? d : v; };
+  return {
+    url: ctv('ct-url').value,
+    name: { x: num('ct-nx', 50), y: num('ct-ny', 50), size: num('ct-nsize', 5), color: ctv('ct-ncolor').value, font: ctv('ct-nfont').value, weight: '800', maxW: num('ct-nmaxw', 80) },
+    qr: { on: ctv('ct-qon').checked, x: num('ct-qx', 86), y: num('ct-qy', 80), size: num('ct-qsize', 11) },
+    id: { on: ctv('ct-ion').checked, x: num('ct-ix', 50), y: num('ct-iy', 95), size: num('ct-isize', 1.3), color: ctv('ct-icolor').value }
+  };
+}
+
+function fillCertForm(t) {
+  t = certMergeTpl(t);
+  ctv('ct-url').value = t.url;
+  ctv('ct-nx').value = t.name.x; ctv('ct-ny').value = t.name.y; ctv('ct-nsize').value = t.name.size;
+  ctv('ct-ncolor').value = t.name.color; ctv('ct-nfont').value = t.name.font; ctv('ct-nmaxw').value = t.name.maxW;
+  ctv('ct-qon').checked = !!t.qr.on; ctv('ct-qx').value = t.qr.x; ctv('ct-qy').value = t.qr.y; ctv('ct-qsize').value = t.qr.size;
+  ctv('ct-ion').checked = !!t.id.on; ctv('ct-ix').value = t.id.x; ctv('ct-iy').value = t.id.y;
+  ctv('ct-isize').value = t.id.size; ctv('ct-icolor').value = t.id.color;
+}
+
+async function loadCertDesign() {
+  const c = await loadSiteContent();
+  const t = c && c.certTemplate;
+  fillCertForm(t);
+  _ctImg = null;
+  if (t && t.url) {
+    ctv('ct-status').textContent = 'Loading your design…';
+    try { _ctImg = await loadCertImage(t.url); ctv('ct-status').textContent = '✅ Design loaded.'; }
+    catch (e) { ctv('ct-status').textContent = '⚠️ The saved design image could not be loaded.'; }
+  } else {
+    ctv('ct-status').textContent = 'No design uploaded yet — the built-in certificate is being used.';
+  }
+  redrawCertPreview();
+}
+
+async function uploadCertDesign(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  if (file.size > 12 * 1024 * 1024) return toast("Image is too large (max 12 MB).", true);
+  ctv('ct-status').textContent = '⏳ Uploading…';
+  const r = await uploadToImgBB(file);   // original quality — no compression
+  input.value = '';
+  if (!r.success) { ctv('ct-status').textContent = '❌ Upload failed.'; return toast("Upload failed!", true); }
+  ctv('ct-url').value = r.url;
+  try { _ctImg = await loadCertImage(r.url); ctv('ct-status').textContent = '✅ Uploaded. Place the name/QR/ID, then Save.'; }
+  catch (e) { ctv('ct-status').textContent = '⚠️ Uploaded, but the preview could not load.'; }
+  redrawCertPreview();
+}
+
+let _ctTimer = null;
+function redrawCertPreview() {
+  clearTimeout(_ctTimer);
+  _ctTimer = setTimeout(async () => {
+    const canvas = ctv('ct-canvas');
+    if (!_ctImg) {
+      canvas.width = 1200; canvas.height = 850;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#f3f4f6'; ctx.fillRect(0, 0, 1200, 850);
+      ctx.fillStyle = '#9aa3b2'; ctx.font = '600 28px Inter, sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('Upload your design to start', 600, 425);
+      return;
+    }
+    const certId = 'ATH-SAMPL-E000-0000';
+    const verifyUrl = new URL('verify.html?id=' + certId, location.href).href;
+    await drawCertTemplate(canvas, _ctImg, readCertTpl(), { name: ctv('ct-sample').value || 'Sample Name', certId, verifyUrl });
+  }, 60);
+}
+
+document.addEventListener('click', (e) => {
+  const canvas = ctv('ct-canvas');
+  if (!canvas || e.target !== canvas || !_ctImg) return;
+  const rect = canvas.getBoundingClientRect();
+  const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
+  const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
+  const target = (document.querySelector('input[name="ct-target"]:checked') || {}).value || 'name';
+  const map = { name: ['ct-nx', 'ct-ny'], qr: ['ct-qx', 'ct-qy'], id: ['ct-ix', 'ct-iy'] }[target];
+  ctv(map[0]).value = x; ctv(map[1]).value = y;
+  redrawCertPreview();
+});
+
+async function saveCertDesign() {
+  const t = readCertTpl();
+  if (!t.url) return toast("Upload your certificate design first.", true);
+  const r = await saveSiteContent({ certTemplate: t });
+  toast(r.success ? "Certificate design saved! ✅" : (r.error || "Save failed!"), !r.success);
+}
+
+async function removeCertDesign() {
+  if (!confirm("Remove your design and go back to the built-in certificate?")) return;
+  const r = await saveSiteContent({ certTemplate: { url: '' } });
+  if (r.success) { toast("Removed."); _ctImg = null; fillCertForm({}); ctv('ct-status').textContent = 'Built-in certificate is being used.'; redrawCertPreview(); }
+  else toast(r.error || "Failed!", true);
 }
