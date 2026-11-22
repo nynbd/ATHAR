@@ -193,6 +193,7 @@ textarea.fi{min-height:70px;resize:vertical;}
         <button class="adm-nb" data-sec="part-adm" onclick="goSec(this)"><span class="ico">🙋</span>Participants</button>
 
         <div class="adm-ns">Settings</div>
+        <button class="adm-nb" data-sec="names-adm" onclick="goSec(this)"><span class="ico">📋</span>Participant Names</button>
         <button class="adm-nb" data-sec="cert-adm" onclick="goSec(this)"><span class="ico">🎓</span>Certificate Design</button>
         <button class="adm-nb" data-sec="site-adm" onclick="goSec(this)"><span class="ico">⚙️</span>Site Info</button>
       </nav>
@@ -395,6 +396,20 @@ textarea.fi{min-height:70px;resize:vertical;}
             <select class="fi" id="pr-adj-in"><option value="-2">-2</option><option value="-1">-1</option><option value="0" selected>0</option><option value="1">+1</option><option value="2">+2</option></select>
             <small style="color:var(--muted);font-size:.75rem;">Use this if the moon-sighting date in your country differs from the calculated one.</small></div>
           <button class="save-btn" onclick="savePrayerSettings()">💾 Save Prayer Settings</button>
+        </div>
+      </div>
+
+      <!-- PARTICIPANT NAMES (download list) -->
+      <div class="adm-sec" id="names-adm">
+        <div class="card" style="margin-bottom:18px;">
+          <h2>📋 Participant Names</h2>
+          <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px;">Only the names listed here can download a certificate on <strong>certificate.html</strong> (they type their full name). These certificates have <strong>no verify QR/ID</strong>. For winners, use <em>Participants → + Add Certificate</em> instead.</p>
+          <div class="fg"><label>Add names — one name per line</label><textarea class="fi" id="cn-input" style="min-height:140px;" placeholder="Abdullah Al Mamun&#10;Fatima Akter&#10;আব্দুর রহমান"></textarea></div>
+          <button class="save-btn" onclick="addCertNames()">➕ Add Names</button>
+        </div>
+        <div class="card">
+          <div class="fg"><label id="cn-count">Names</label><input class="fi" id="cn-search" placeholder="Search a name..." oninput="renderCertNames()"></div>
+          <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Name</th><th>Actions</th></tr></thead><tbody id="cn-body"><tr class="empty-row"><td colspan="2">Loading...</td></tr></tbody></table></div>
         </div>
       </div>
 
@@ -627,14 +642,14 @@ textarea.fi{min-height:70px;resize:vertical;}
 <div class="fm-ov" id="certmodal" onclick="if(event.target===this)closeCertForm()">
   <div class="fm">
     <div class="fm-head">
-      <h3>Add Certificate</h3>
+      <h3>Add Winner Certificate</h3>
       <button onclick="closeCertForm()">✕</button>
     </div>
     <div id="cert-form-view">
-      <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px;">Issue a certificate directly — no sign-up needed. The person can download it on <strong>certificate.html</strong> using this email, and anyone can verify it on <strong>verify.html</strong>.</p>
+      <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px;">For winners (1st, 2nd, 3rd…). This creates a Certificate ID that anyone can check on <strong>verify.html</strong>. Put the ID/QR on the certificate you email to the winner. (Participants do not need this — add their names under <em>Participant Names</em>.)</p>
       <div class="fg"><label>Full Name *</label><input class="fi" id="cert-name" placeholder="Name as it should appear on the certificate"></div>
       <div class="fg"><label>Email *</label><input class="fi" id="cert-email" type="email" placeholder="person@email.com"></div>
-      <div class="fg"><label>Program / Course *</label><input class="fi" id="cert-program" list="cert-program-list" placeholder="Pick a program or type a title"><datalist id="cert-program-list"></datalist></div>
+      <div class="fg"><label>Award / Program *</label><input class="fi" id="cert-program" list="cert-program-list" placeholder="e.g. Winner (1st Place) — Quran Competition"><datalist id="cert-program-list"></datalist></div>
       <div class="fm-foot">
         <button class="fc-btn" onclick="closeCertForm()">Cancel</button>
         <button class="fs-btn" id="cert-save-btn" onclick="saveNewCertificate()">Issue Certificate</button>
@@ -645,7 +660,9 @@ textarea.fi{min-height:70px;resize:vertical;}
       <h3 style="margin:8px 0 4px;">Certificate issued!</h3>
       <p style="color:var(--muted);font-size:.85rem;">Certificate ID</p>
       <p id="cert-done-id" style="font-family:monospace;font-size:1.15rem;font-weight:700;margin:4px 0 14px;user-select:all;"></p>
+      <canvas id="cert-done-qr" width="10" height="10" style="width:150px;height:150px;margin:0 auto 10px;display:block;image-rendering:pixelated;"></canvas>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+        <button class="fc-btn" onclick="downloadCertQR()">⬇️ Download QR</button>
         <a class="fs-btn" id="cert-done-verify" href="#" target="_blank" rel="noopener" style="text-decoration:none;">Open verify page</a>
         <button class="fc-btn" onclick="openCertForm()">+ Add another</button>
       </div>

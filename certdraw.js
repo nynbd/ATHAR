@@ -23,6 +23,7 @@
       id: Object.assign({}, d.id, t.id || {})
     };
   };
+  window.certNormName = function (s) { return String(s == null ? '' : s).normalize('NFC').replace(/\s+/g, ' ').trim().toLowerCase(); };
   window.loadCertImage = function (url) {
     return new Promise(function (resolve, reject) {
       var img = new Image();

@@ -99,6 +99,7 @@ function goSec(btn) {
     'mem-adm': 'Membership',
     'notice-adm': 'Notice & News',
     'daily-adm': 'Ayah & Prayer Times',
+    'names-adm': 'Participant Names',
     'cert-adm': 'Certificate Design',
     'prog-adm': 'Manage Programs & Events',
     'team-adm': 'Manage Team',
@@ -126,7 +127,7 @@ function goSec(btn) {
   } else if (secId === 'network-adm') {
     actions.innerHTML = `<button class="add-btn" onclick="openNetworkForm()">+ Add Page</button>`;
   } else if (secId === 'part-adm') {
-    actions.innerHTML = `<button class="save-btn" onclick="renderParticipantsTable()">🔄 Refresh</button> <button class="add-btn" onclick="openCertForm()">+ Add Certificate</button> <button class="add-btn" onclick="syncCertificates()">🎓 Sync Certificates</button>`;
+    actions.innerHTML = `<button class="save-btn" onclick="renderParticipantsTable()">🔄 Refresh</button> <button class="add-btn" onclick="openCertForm()">+ Add Winner Certificate</button> <button class="add-btn" onclick="syncCertificates()">🎓 Sync Certificates</button>`;
   } else if (secId === 'site-adm') {
     actions.innerHTML = `<button class="save-btn" onclick="saveSiteInfo()">💾 Save Changes</button>`;
   }
@@ -135,6 +136,7 @@ function goSec(btn) {
   // once at login — otherwise a submission made after login never shows
   // up until the admin manually reloads the whole page.
   if (secId === 'dept-adm' || secId === 'mem-adm') loadInfoLists();
+  if (secId === 'names-adm') loadCertNamesAdmin();
   if (secId === 'cert-adm') loadCertDesign();
   if (secId === 'notice-adm') loadNoticesAdmin();
   if (secId === 'daily-adm') loadDailySettings();
@@ -893,6 +895,7 @@ async function saveNewCertificate() {
 
   btn.disabled = false; btn.textContent = 'Issue Certificate';
   document.getElementById('cert-done-id').textContent = issued.certId;
+  drawDoneQR(new URL('verify.html?id=' + encodeURIComponent(issued.certId), location.href).href, issued.certId);
   document.getElementById('cert-done-verify').href = 'verify.html?id=' + encodeURIComponent(issued.certId);
   document.getElementById('cert-form-view').style.display = 'none';
   document.getElementById('cert-done-view').style.display = 'block';
@@ -1144,4 +1147,83 @@ async function removeCertDesign() {
     toast("Removed."); _ctImg = null; _ctDataUrl = ''; fillCertForm({});
     ctv('ct-status').textContent = 'Built-in certificate is being used.'; redrawCertPreview();
   } else toast(r.error || "Failed!", true);
+}
+
+
+/*===== WINNER QR (for the certificates you email) =====*/
+let _doneQrName = 'qr';
+function drawDoneQR(url, certId) {
+  const cv = document.getElementById('cert-done-qr');
+  if (!cv || !window.ATHARQR) return;
+  const m = window.ATHARQR.matrix(url), n = m.length, cell = Math.max(4, Math.floor(400 / (n + 2)));
+  const size = (n + 2) * cell;
+  cv.width = size; cv.height = size;
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, size, size);
+  ctx.fillStyle = '#071F3D';
+  for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (m[r][c]) ctx.fillRect((c + 1) * cell, (r + 1) * cell, cell, cell);
+  _doneQrName = 'verify-QR-' + certId;
+}
+
+function downloadCertQR() {
+  const cv = document.getElementById('cert-done-qr');
+  const a = document.createElement('a');
+  a.href = cv.toDataURL('image/png');
+  a.download = _doneQrName + '.png';
+  a.click();
+}
+
+/*===== PARTICIPANT NAMES (download list) =====*/
+let cachedNames = [];
+
+async function loadCertNamesAdmin() {
+  const body = document.getElementById('cn-body');
+  if (body) body.innerHTML = `<tr class="empty-row"><td colspan="2">Loading...</td></tr>`;
+  try { cachedNames = await loadCertNames(); } catch (e) { cachedNames = []; toast("Could not load names.", true); }
+  renderCertNames();
+}
+
+function renderCertNames() {
+  const body = document.getElementById('cn-body');
+  if (!body) return;
+  const q = certNormName(document.getElementById('cn-search').value);
+  const rows = [];
+  cachedNames.forEach((n, i) => { if (!q || certNormName(n).includes(q)) rows.push({ n, i }); });
+  document.getElementById('cn-count').textContent = 'Names (' + cachedNames.length + ' total' + (q ? ', ' + rows.length + ' shown' : '') + ')';
+  if (!rows.length) {
+    body.innerHTML = `<tr class="empty-row"><td colspan="2">${cachedNames.length ? 'No match.' : 'No names yet. Add some above.'}</td></tr>`;
+    return;
+  }
+  body.innerHTML = rows.slice(0, 300).map(r => `
+    <tr><td>${escHtml(r.n)}</td>
+    <td class="tbl-acts"><button class="d-btn" onclick="deleteCertName(${r.i})">Delete</button></td></tr>`).join('')
+    + (rows.length > 300 ? `<tr class="empty-row"><td colspan="2">Showing the first 300 — use search to narrow down.</td></tr>` : '');
+}
+
+async function addCertNames() {
+  const lines = document.getElementById('cn-input').value.split(/\r?\n/).map(s => s.replace(/\s+/g, ' ').trim()).filter(Boolean);
+  if (!lines.length) return toast("Write at least one name.", true);
+  const latest = await loadCertNames().catch(() => cachedNames);   // merge with the newest saved list
+  const seen = new Set(latest.map(certNormName));
+  const list = [...latest];
+  let added = 0;
+  lines.forEach(n => { const k = certNormName(n); if (!seen.has(k)) { seen.add(k); list.push(n); added++; } });
+  if (!added) return toast("All these names are already in the list.", true);
+  list.sort((a, b) => a.localeCompare(b));
+  const r = await saveCertNames(list);
+  if (r.success) {
+    cachedNames = list;
+    document.getElementById('cn-input').value = '';
+    toast(added + " name(s) added" + (lines.length - added ? " (" + (lines.length - added) + " duplicate skipped)" : "") + " ✅");
+    renderCertNames();
+  } else toast(r.error || "Save failed!", true);
+}
+
+async function deleteCertName(i) {
+  const name = cachedNames[i];
+  if (name === undefined || !confirm('Delete "' + name + '"?')) return;
+  const list = cachedNames.filter((_, k) => k !== i);
+  const r = await saveCertNames(list);
+  if (r.success) { cachedNames = list; toast("Deleted."); renderCertNames(); }
+  else toast(r.error || "Delete failed!", true);
 }

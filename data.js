@@ -524,3 +524,24 @@ async function saveCertDesignImage(dataUrl) {
     return { success: false, error: err.message };
   }
 }
+
+
+/*===== Participant names (content/certNames) — participants download by typing their name =====*/
+async function loadCertNames() {
+  await waitForFirebase();
+  const { doc, getDoc } = window.firebaseFunctions;
+  const snap = await getDoc(doc(window.firebaseDB, "content", "certNames"));
+  return snap.exists() && Array.isArray(snap.data().names) ? snap.data().names : [];
+}
+
+async function saveCertNames(names) {
+  await waitForFirebase();
+  const { doc, setDoc } = window.firebaseFunctions;
+  try {
+    await setDoc(doc(window.firebaseDB, "content", "certNames"), { names, updatedAt: Date.now() });
+    return { success: true };
+  } catch (err) {
+    console.error("Save names error:", err);
+    return { success: false, error: err.message };
+  }
+}

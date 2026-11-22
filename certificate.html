@@ -484,9 +484,9 @@ body.loading{overflow:hidden;}
 <section class="section" style="padding-bottom:20px;">
   <div class="wrap">
     <div class="section-head reveal" style="margin-bottom:0;">
-      <div class="section-tag">Verify &amp; Download</div>
+      <div class="section-tag">Participants</div>
       <h2>Get your certificate</h2>
-      <p>Enter the name and email you used when you joined — if your program is marked complete, your certificate is ready instantly.</p>
+      <p>Enter your full name exactly as ATHAR has it. If you are on the participant list, your certificate is ready to download instantly.</p>
     </div>
   </div>
 </section>
@@ -495,8 +495,8 @@ body.loading{overflow:hidden;}
   <div class="wrap" style="max-width:520px;">
     <div class="reveal" style="background:var(--bg);border:1px solid var(--line);border-radius:var(--r-md);padding:28px;box-shadow:0 1px 3px rgba(7,31,61,.05);">
       <div class="field" style="margin-bottom:20px;">
-        <label>Your Email</label>
-        <input id="cert-email" type="email" placeholder="The email ATHAR has for you">
+        <label>Your Full Name</label>
+        <input id="cert-name" placeholder="আপনার পূর্ণ নাম / Your full name" autocomplete="name">
       </div>
       <button class="btn btn-orange" style="width:100%;" onclick="findCertificate()">🎓 Find My Certificate</button>
       <p id="cert-msg" style="margin-top:14px;font-size:.86rem;"></p>
@@ -770,52 +770,39 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 async function findCertificate() {
-  const emailInput = document.getElementById('cert-email').value.trim().toLowerCase();
+  const nameInput = document.getElementById('cert-name').value.trim();
   const msg = document.getElementById('cert-msg');
   const resultBox = document.getElementById('cert-result');
   const switcher = document.getElementById('cert-switcher');
   resultBox.style.display = 'none';
   switcher.style.display = 'none';
 
-  if (!emailInput) {
-    msg.textContent = 'Please enter your email.';
+  if (!nameInput) {
+    msg.textContent = 'Please enter your full name.';
     msg.style.color = '#c0392b';
     return;
   }
-
   msg.textContent = 'Searching…';
   msg.style.color = 'var(--muted)';
 
-  let matches = [];
+  let names = [];
   try {
-    const hash = await sha256Hex(emailHashInput(emailInput));
-    const ids = await loadCertIndex(hash);
-    const certs = await Promise.all(ids.map(id => loadCertificate(id)));
-    matches = certs.filter(c => c && !c.revoked);
+    names = await loadCertNames();
   } catch (err) {
     msg.textContent = 'Could not reach the certificate service. Please try again in a moment.';
     msg.style.color = '#c0392b';
     return;
   }
-
-  if (!matches.length) {
-    msg.textContent = "No certificate found for this email. Certificates are available only to participants listed by ATHAR. If you think this is a mistake, please contact us.";
+  const key = certNormName(nameInput);
+  const found = names.find(n => certNormName(n) === key);
+  if (!found) {
+    msg.textContent = 'No certificate found for this name. Please check the spelling, or contact ATHAR if you think this is a mistake.';
     msg.style.color = '#c0392b';
     return;
   }
 
   msg.textContent = '';
-  window._certMatches = matches;
-
-  if (matches.length > 1) {
-    const sel = document.getElementById('cert-select');
-    sel.innerHTML = matches.map((m, i) => {
-      const d = m.submittedAt ? new Date(m.submittedAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
-      return `<option value="${i}">${m.programTitle || 'Program'}${d ? ' — ' + d : ''}</option>`;
-    }).join('');
-    switcher.style.display = 'block';
-  }
-
+  window._certMatches = [{ name: found }];
   renderSelectedCertificate();
   resultBox.style.display = 'block';
   resultBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -863,7 +850,7 @@ async function drawCertificate(p) {
   const t = await getCertTemplate();
   if (t) {
     const certId = p.certId || '';
-    const verifyUrl = new URL('verify.html?id=' + encodeURIComponent(certId), location.href).href;
+    const verifyUrl = certId ? new URL('verify.html?id=' + encodeURIComponent(certId), location.href).href : '';
     const canvas = document.getElementById('cert-canvas');
     await drawCertTemplate(canvas, t.img, t.tpl, { name: p.name || 'Member', certId, verifyUrl });
     window._certFileName = 'ATHAR-Certificate-' + (p.name || 'Member').replace(/\s+/g, '-') + '.png';
@@ -949,10 +936,12 @@ function drawBuiltInCertificate(p) {
   ctx.font = '700 ' + progSize + 'px Montserrat, sans-serif';
   ctx.fillText(progTitle, W / 2, 472);
 
-  const dateStr = new Date(p.issuedAt || Date.now()).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
-  ctx.fillStyle = '#5B6472';
-  ctx.font = "400 17px Inter, sans-serif";
-  ctx.fillText('Issued on ' + dateStr, W / 2, 522);
+  if (p.issuedAt) {
+    const dateStr = new Date(p.issuedAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+    ctx.fillStyle = '#5B6472';
+    ctx.font = "400 17px Inter, sans-serif";
+    ctx.fillText('Issued on ' + dateStr, W / 2, 522);
+  }
 
   ctx.strokeStyle = '#071F3D';
   ctx.lineWidth = 1.5;
@@ -964,7 +953,7 @@ function drawBuiltInCertificate(p) {
   ctx.fillText('ATHAR Islamic Youth Forum', W - 350, 725);
 
   const certId = p.certId || '';
-  const verifyUrl = new URL('verify.html?id=' + encodeURIComponent(certId), location.href).href;
+  const verifyUrl = certId ? new URL('verify.html?id=' + encodeURIComponent(certId), location.href).href : '';
   if (certId && window.ATHARQR) {
     const m = window.ATHARQR.matrix(verifyUrl);
     const n = m.length, cell = Math.floor(148 / n), qs = cell * n, pad = 9;
@@ -979,11 +968,13 @@ function drawBuiltInCertificate(p) {
     ctx.font = "600 11px Inter, sans-serif";
     ctx.fillText('SCAN TO VERIFY', W / 2, qy + qs + pad + 14);
   }
-  ctx.fillStyle = '#93A0B4';
-  ctx.font = "13px monospace";
-  ctx.fillText('Certificate ID: ' + certId, W / 2, H - 78);
-  ctx.font = "11px monospace";
-  ctx.fillText(verifyUrl.replace(/^https?:[/][/]/, '').replace(/[?].*$/, ''), W / 2, H - 60);
+  if (certId) {
+    ctx.fillStyle = '#93A0B4';
+    ctx.font = "13px monospace";
+    ctx.fillText('Certificate ID: ' + certId, W / 2, H - 78);
+    ctx.font = "11px monospace";
+    ctx.fillText(verifyUrl.replace(/^https?:[/][/]/, '').replace(/[?].*$/, ''), W / 2, H - 60);
+  }
 
   window._certFileName = 'ATHAR-Certificate-' + name.replace(/\s+/g, '-') + '.png';
 }
@@ -1001,7 +992,7 @@ function downloadCertificate() {
 }
 
 document.getElementById('cert-name').addEventListener('keydown', e => { if (e.key === 'Enter') findCertificate(); });
-document.getElementById('cert-email').addEventListener('keydown', e => { if (e.key === 'Enter') findCertificate(); });
+document.getElementById('cert-name').addEventListener('keydown', e => { if (e.key === 'Enter') findCertificate(); });
 
 </script>
 
