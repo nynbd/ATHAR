@@ -85,8 +85,15 @@
       m.style.pointerEvents='none';
     }
     /* Footer skyline on every page */
-    var foot=document.querySelector('footer');
+    var strip=document.querySelector('.dev-strip');
+    var foot=strip||document.querySelector('footer');
     if(foot){ var fs=document.createElement('div'); fs.className='foot-skyline'; fs.innerHTML=skyline('#071F3D',true); fs.firstChild.style.cssText='width:100%;height:100%;display:block'; foot.insertBefore(fs,foot.firstChild); }
+    if(strip){
+      if('IntersectionObserver' in window){
+        var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ strip.classList.add('in'); io.disconnect(); } }); },{threshold:.35});
+        io.observe(strip);
+      } else strip.classList.add('in');
+    }
 
     if(reduce || !fine) return;
 

@@ -245,7 +245,47 @@ footer{position:relative;}
 #theme-toggle:hover{transform:rotate(25deg) scale(1.08);background:rgba(233,198,118,.18);box-shadow:0 0 14px rgba(233,198,118,.4);}
 @media print{#theme-toggle{display:none!important;}}
 
-/* Developer credit in footer */
-.dev-credit{margin-top:4px;}
-.dev-credit a{color:#2ECC71!important;font-weight:700;text-decoration:none;transition:color .2s,text-shadow .2s;}
-.dev-credit a:hover{color:#5FE39A!important;text-shadow:0 0 12px rgba(46,204,113,.55);text-decoration:underline;}
+
+
+/* ===== COMPACT FOOTER ===== */
+footer{padding:34px 0 18px!important;}
+.foot-grid{gap:28px!important;margin-bottom:22px!important;}
+.foot-bism{font-size:1.35rem!important;padding-bottom:16px!important;margin-bottom:22px!important;}
+.foot-brand{margin-bottom:10px!important;}
+footer nav a{padding:3px 0!important;font-size:.86rem!important;}
+footer h4{margin-bottom:10px!important;}
+.foot-bottom{padding-top:16px!important;}
+@media (max-width:860px){
+  footer{padding:26px 0 14px!important;}
+  .foot-grid{grid-template-columns:1fr 1fr!important;gap:20px 16px!important;margin-bottom:16px!important;}
+  .foot-grid>*:first-child{grid-column:1/-1;}
+  .foot-bism{font-size:1.15rem!important;padding-bottom:12px!important;margin-bottom:16px!important;}
+  .foot-bottom{padding-top:12px!important;font-size:.74rem!important;gap:4px!important;}
+}
+
+/* ===== DEVELOPER CREDIT STRIP (above footer) ===== */
+.dev-strip{position:relative;z-index:2;background:linear-gradient(180deg,#071F3D,#05182F);padding:18px 16px 16px;text-align:center;overflow:visible;
+  border-bottom:1px solid rgba(233,198,118,.28);}
+.dev-strip::before{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,#2ECC71,#E9C676,#2ECC71,transparent);background-size:200% 100%;animation:stripFlow 5s linear infinite;opacity:.9;}
+.dev-strip::after{content:"";position:absolute;top:0;left:-40%;width:30%;height:100%;transform:skewX(-20deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);animation:stripSweep 6s ease-in-out infinite;pointer-events:none;}
+.dev-strip-inner{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;
+  opacity:0;transform:translateY(16px) scale(.96);}
+.dev-strip.in .dev-strip-inner{animation:devIn 1s cubic-bezier(.16,.84,.44,1) forwards;}
+.dev-label{font-family:'Montserrat','Inter',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:#E9C676;}
+.dev-name{position:relative;display:inline-block;padding:8px 20px;border-radius:99px;font-family:'Montserrat','Inter',sans-serif;font-weight:800;font-size:.98rem;letter-spacing:.04em;text-decoration:none;
+  background:linear-gradient(110deg,#1FBF6B 0%,#7DF0B0 35%,#2ECC71 50%,#7DF0B0 65%,#1FBF6B 100%);background-size:250% 100%;
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#2ECC71;
+  border:1px solid rgba(46,204,113,.55);box-shadow:0 0 0 1px rgba(46,204,113,.12) inset,0 0 22px rgba(46,204,113,.25);
+  animation:nameShine 3.4s linear infinite,namePulse 3s ease-in-out infinite;transition:transform .3s cubic-bezier(.2,.8,.2,1);}
+.dev-name:hover{transform:translateY(-3px) scale(1.06);box-shadow:0 0 0 1px rgba(46,204,113,.4) inset,0 0 34px rgba(46,204,113,.6);}
+.dev-spark{color:#E9C676;font-size:.95rem;display:inline-block;animation:sparkSpin 5s linear infinite;filter:drop-shadow(0 0 6px rgba(233,198,118,.8));}
+.dev-spark:last-child{animation-direction:reverse;}
+@keyframes devIn{to{opacity:1;transform:none;}}
+@keyframes nameShine{to{background-position:-250% 0;}}
+@keyframes namePulse{0%,100%{box-shadow:0 0 0 1px rgba(46,204,113,.12) inset,0 0 18px rgba(46,204,113,.22);}50%{box-shadow:0 0 0 1px rgba(46,204,113,.3) inset,0 0 32px rgba(46,204,113,.5);}}
+@keyframes sparkSpin{0%{transform:rotate(0) scale(1);}50%{transform:rotate(180deg) scale(1.3);}100%{transform:rotate(360deg) scale(1);}}
+@keyframes stripFlow{to{background-position:200% 0;}}
+@keyframes stripSweep{0%,60%{left:-40%;}100%{left:140%;}}
+@media (max-width:640px){.dev-strip{padding:16px 12px 14px;}.dev-label{font-size:.62rem;letter-spacing:.2em;}.dev-name{font-size:.9rem;padding:7px 16px;}}
+@media (prefers-reduced-motion:reduce){.dev-strip::before,.dev-strip::after,.dev-name,.dev-spark{animation:none!important;}.dev-strip-inner{opacity:1;transform:none;animation:none!important;}}
+@media print{.dev-strip{display:none!important;}}
