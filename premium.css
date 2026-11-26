@@ -99,7 +99,7 @@ html{scroll-behavior:smooth;}
 #cursor-glow{position:fixed;left:0;top:0;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;pointer-events:none;z-index:9000;opacity:0;transition:opacity .4s ease;
   background:radial-gradient(circle,rgba(233,198,118,.13) 0%,rgba(233,198,118,0) 65%);mix-blend-mode:screen;will-change:transform;}
 #cursor-glow.on{opacity:1;}
-#to-top{position:fixed;left:18px;bottom:22px;width:46px;height:46px;border-radius:50%;border:1.5px solid rgba(233,198,118,.7);background:linear-gradient(145deg,#12335E,#071F3D);color:#E9C676;font-size:1.2rem;cursor:pointer;z-index:4000;
+#to-top{position:fixed;right:18px;bottom:22px;width:46px;height:46px;border-radius:50%;border:1.5px solid rgba(233,198,118,.7);background:linear-gradient(145deg,#12335E,#071F3D);color:#E9C676;font-size:1.2rem;cursor:pointer;z-index:4000;
   box-shadow:0 10px 24px rgba(4,22,41,.4),inset 0 1px 0 rgba(255,255,255,.18);opacity:0;transform:translateY(20px) scale(.8);pointer-events:none;transition:opacity .3s,transform .3s cubic-bezier(.2,.8,.2,1);}
 #to-top.show{opacity:1;transform:none;pointer-events:auto;}
 #to-top:hover{transform:translateY(-4px) rotateX(18deg);box-shadow:0 16px 30px rgba(4,22,41,.5),0 0 18px rgba(233,198,118,.45);}
@@ -157,7 +157,7 @@ body.loaded>section,body.loaded>footer{animation:pgEnter .8s ease backwards;}
 @keyframes pgEnter{from{opacity:.001;}to{opacity:1;}}
 
 @media (hover:none),(pointer:coarse){#cursor-glow{display:none;}.tilt{transition:transform .3s ease;}}
-@media (max-width:640px){.hero-stars i:nth-child(n+4){display:none;}#to-top{width:40px;height:40px;left:12px;bottom:16px;}}
+@media (max-width:640px){.hero-stars i:nth-child(n+4){display:none;}#to-top{width:40px;height:40px;right:12px;bottom:16px;}}
 @media (prefers-reduced-motion:reduce){
   .hero-stars i,.btn-orange::after,.hero-logo-disc,.sp-disc,body.loaded>section,body.loaded>footer{animation:none!important;}
   .tilt,.tilt.tilting,.btn-orange:hover,.brand:hover .brand-mark{transform:none!important;}
@@ -289,3 +289,10 @@ footer h4{margin-bottom:10px!important;}
 @media (max-width:640px){.dev-strip{padding:16px 12px 14px;}.dev-label{font-size:.62rem;letter-spacing:.2em;}.dev-name{font-size:.9rem;padding:7px 16px;}}
 @media (prefers-reduced-motion:reduce){.dev-strip::before,.dev-strip::after,.dev-name,.dev-spark{animation:none!important;}.dev-strip-inner{opacity:1;transform:none;animation:none!important;}}
 @media print{.dev-strip{display:none!important;}}
+
+
+/* Credit stays on ONE line on every screen */
+.dev-strip-inner{flex-wrap:nowrap!important;gap:10px;white-space:nowrap;}
+.dev-label{font-size:clamp(.5rem,2.3vw,.7rem)!important;letter-spacing:clamp(.1em,.8vw,.26em)!important;}
+.dev-name{font-size:clamp(.72rem,3.3vw,.98rem)!important;padding:clamp(5px,1.6vw,8px) clamp(11px,3.4vw,20px)!important;}
+@media (max-width:480px){.dev-spark{display:none;}.dev-strip-inner{gap:8px;}}

@@ -32,7 +32,9 @@
       var h=document.documentElement.scrollHeight-window.innerHeight;
       var p=h>0?Math.min(1,window.scrollY/h):0;
       bar.style.transform='scaleX('+p+')';
-      top.classList.toggle('show',window.scrollY>500);
+      var ds=document.getElementById('dev-strip'), nearEnd=false;
+      if(ds){ nearEnd=ds.getBoundingClientRect().top < window.innerHeight; }   // keep the ↑ button away from the credit
+      top.classList.toggle('show',window.scrollY>500 && !nearEnd);
       var hv=document.querySelector('.hero-visual');
       if(hv && !reduce && window.scrollY<900){ hv.style.setProperty('--py',(window.scrollY*0.12)+'px'); }
       ticking=false;
