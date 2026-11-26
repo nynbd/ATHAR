@@ -264,35 +264,42 @@ footer h4{margin-bottom:10px!important;}
 }
 
 /* ===== DEVELOPER CREDIT STRIP (above footer) ===== */
-.dev-strip{position:relative;z-index:2;background:linear-gradient(180deg,#071F3D,#05182F);padding:18px 16px 16px;text-align:center;overflow:visible;
-  border-bottom:1px solid rgba(233,198,118,.28);}
+/* NOTE: only transform/opacity/background-position are animated here (no left/top/width),
+   and the strip clips sideways overflow, so the credit can never push the page around or
+   cause the scroll position to jump on phones. clip-path leaves the top open for the skyline. */
+.dev-strip{position:relative;z-index:2;padding:26px 14px 22px;text-align:center;
+  background:radial-gradient(ellipse 60% 120% at 50% 0%,rgba(46,204,113,.10),transparent 70%),linear-gradient(180deg,#071F3D,#041629);
+  border-bottom:1px solid rgba(233,198,118,.22);clip-path:inset(-300px 0 0 0);}
 .dev-strip::before{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,transparent,#2ECC71,#E9C676,#2ECC71,transparent);background-size:200% 100%;animation:stripFlow 5s linear infinite;opacity:.9;}
-.dev-strip::after{content:"";position:absolute;top:0;left:-40%;width:30%;height:100%;transform:skewX(-20deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);animation:stripSweep 6s ease-in-out infinite;pointer-events:none;}
-.dev-strip-inner{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;
+.dev-strip-inner{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;gap:12px;flex-wrap:nowrap;white-space:nowrap;
+  max-width:100%;padding:10px 12px 10px 20px;border-radius:99px;overflow:hidden;
+  background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.02));
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  border:1px solid rgba(233,198,118,.35);
+  box-shadow:0 10px 30px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12),0 0 0 4px rgba(233,198,118,.05);
   opacity:0;transform:translateY(16px) scale(.96);}
+.dev-strip-inner::after{content:"";position:absolute;top:0;bottom:0;left:0;width:40%;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.16),transparent);
+  transform:translateX(-160%) skewX(-20deg);animation:stripSweep 5.5s ease-in-out infinite;}
 .dev-strip.in .dev-strip-inner{animation:devIn 1s cubic-bezier(.16,.84,.44,1) forwards;}
-.dev-label{font-family:'Montserrat','Inter',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.26em;text-transform:uppercase;color:#E9C676;}
-.dev-name{position:relative;display:inline-block;padding:8px 20px;border-radius:99px;font-family:'Montserrat','Inter',sans-serif;font-weight:800;font-size:.98rem;letter-spacing:.04em;text-decoration:none;
-  background:linear-gradient(110deg,#1FBF6B 0%,#7DF0B0 35%,#2ECC71 50%,#7DF0B0 65%,#1FBF6B 100%);background-size:250% 100%;
-  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#2ECC71;
-  border:1px solid rgba(46,204,113,.55);box-shadow:0 0 0 1px rgba(46,204,113,.12) inset,0 0 22px rgba(46,204,113,.25);
-  animation:nameShine 3.4s linear infinite,namePulse 3s ease-in-out infinite;transition:transform .3s cubic-bezier(.2,.8,.2,1);}
-.dev-name:hover{transform:translateY(-3px) scale(1.06);box-shadow:0 0 0 1px rgba(46,204,113,.4) inset,0 0 34px rgba(46,204,113,.6);}
-.dev-spark{color:#E9C676;font-size:.95rem;display:inline-block;animation:sparkSpin 5s linear infinite;filter:drop-shadow(0 0 6px rgba(233,198,118,.8));}
-.dev-spark:last-child{animation-direction:reverse;}
+.dev-label{font-family:'Montserrat','Inter',sans-serif;font-size:clamp(.5rem,2.3vw,.68rem);font-weight:600;letter-spacing:clamp(.1em,.8vw,.24em);text-transform:uppercase;color:#E9C676;opacity:.95;}
+.dev-label::after{content:"";display:inline-block;width:1px;height:1.3em;margin-left:12px;vertical-align:middle;background:linear-gradient(180deg,transparent,rgba(233,198,118,.7),transparent);}
+.dev-name{position:relative;display:inline-flex;align-items:center;gap:8px;padding:clamp(6px,1.8vw,9px) clamp(13px,3.6vw,20px);border-radius:99px;
+  font-family:'Montserrat','Inter',sans-serif;font-weight:800;font-size:clamp(.72rem,3.3vw,.95rem);letter-spacing:.04em;text-decoration:none;color:#06210f;
+  background:linear-gradient(110deg,#1FBF6B 0%,#7DF0B0 30%,#E9C676 50%,#7DF0B0 70%,#1FBF6B 100%);background-size:250% 100%;
+  box-shadow:0 6px 18px rgba(46,204,113,.35),inset 0 1px 0 rgba(255,255,255,.55);
+  animation:nameShine 4s linear infinite;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s;}
+.dev-name::after{content:"\2197";font-size:.95em;font-weight:900;transition:transform .3s cubic-bezier(.2,.8,.2,1);}
+.dev-name:hover,.dev-name:focus-visible{transform:translateY(-2px) scale(1.04);box-shadow:0 10px 26px rgba(46,204,113,.55),inset 0 1px 0 rgba(255,255,255,.6);outline:none;}
+.dev-name:hover::after{transform:translate(2px,-2px);}
+.dev-spark{color:#E9C676;font-size:.9rem;display:inline-block;animation:sparkSpin 5s linear infinite;filter:drop-shadow(0 0 6px rgba(233,198,118,.8));}
+.dev-spark:first-child{display:none;}
+.dev-spark:last-child{display:none;}
 @keyframes devIn{to{opacity:1;transform:none;}}
 @keyframes nameShine{to{background-position:-250% 0;}}
-@keyframes namePulse{0%,100%{box-shadow:0 0 0 1px rgba(46,204,113,.12) inset,0 0 18px rgba(46,204,113,.22);}50%{box-shadow:0 0 0 1px rgba(46,204,113,.3) inset,0 0 32px rgba(46,204,113,.5);}}
 @keyframes sparkSpin{0%{transform:rotate(0) scale(1);}50%{transform:rotate(180deg) scale(1.3);}100%{transform:rotate(360deg) scale(1);}}
 @keyframes stripFlow{to{background-position:200% 0;}}
-@keyframes stripSweep{0%,60%{left:-40%;}100%{left:140%;}}
-@media (max-width:640px){.dev-strip{padding:16px 12px 14px;}.dev-label{font-size:.62rem;letter-spacing:.2em;}.dev-name{font-size:.9rem;padding:7px 16px;}}
-@media (prefers-reduced-motion:reduce){.dev-strip::before,.dev-strip::after,.dev-name,.dev-spark{animation:none!important;}.dev-strip-inner{opacity:1;transform:none;animation:none!important;}}
+@keyframes stripSweep{0%,55%{transform:translateX(-160%) skewX(-20deg);}100%{transform:translateX(420%) skewX(-20deg);}}
+@media (max-width:520px){.dev-strip{padding:22px 14px 18px;}.dev-strip-inner{flex-direction:column;gap:9px;padding:12px 14px 12px;border-radius:26px;}.dev-label::after{display:none;}.dev-label{font-size:.62rem;letter-spacing:.2em;}.dev-name{font-size:.9rem;padding:8px 18px;}}
+@media (prefers-reduced-motion:reduce){.dev-strip::before,.dev-strip-inner::after,.dev-name,.dev-spark{animation:none!important;}.dev-strip-inner{opacity:1;transform:none;animation:none!important;}}
 @media print{.dev-strip{display:none!important;}}
-
-
-/* Credit stays on ONE line on every screen */
-.dev-strip-inner{flex-wrap:nowrap!important;gap:10px;white-space:nowrap;}
-.dev-label{font-size:clamp(.5rem,2.3vw,.7rem)!important;letter-spacing:clamp(.1em,.8vw,.26em)!important;}
-.dev-name{font-size:clamp(.72rem,3.3vw,.98rem)!important;padding:clamp(5px,1.6vw,8px) clamp(11px,3.4vw,20px)!important;}
-@media (max-width:480px){.dev-spark{display:none;}.dev-strip-inner{gap:8px;}}
