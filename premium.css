@@ -94,7 +94,7 @@ footer{background:var(--star),linear-gradient(180deg,#071F3D,#041629)!important;
 @media (prefers-reduced-motion:reduce){.sp-salam,.sp-orn,.sp-name,.sp-bism{animation:none;opacity:1;transform:none;}}
 
 /* ===== PREMIUM 3D + MOTION LAYER ===== */
-html{scroll-behavior:smooth;}
+html{scroll-behavior:auto;}
 #scroll-progress{position:fixed;top:0;left:0;height:3px;width:100%;z-index:10000;transform-origin:left;transform:scaleX(0);background:var(--gold-grad);box-shadow:0 0 10px rgba(233,198,118,.8);pointer-events:none;}
 #cursor-glow{position:fixed;left:0;top:0;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;pointer-events:none;z-index:9000;opacity:0;transition:opacity .4s ease;
   background:radial-gradient(circle,rgba(233,198,118,.13) 0%,rgba(233,198,118,0) 65%);mix-blend-mode:screen;will-change:transform;}

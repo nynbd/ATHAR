@@ -21,6 +21,17 @@
       if(hb && hb.parentNode) hb.parentNode.insertBefore(btn,hb); else { var hd=document.querySelector('header'); if(hd) hd.appendChild(btn); }
     })();
 
+    /* Smooth scroll ONLY for menu/anchor clicks (a global scroll-behavior:smooth made the page
+       slide back whenever layout shifted while scrolling, especially on phones). */
+    document.addEventListener('click',function(e){
+      var a=e.target.closest&&e.target.closest('a[href^="#"]'); if(!a) return;
+      var id=a.getAttribute('href'); if(id.length<2) return;
+      var t=document.getElementById(id.slice(1)); if(!t) return;
+      e.preventDefault();
+      var hd=document.querySelector('header'), off=hd?hd.offsetHeight:0;
+      window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-off+1,behavior:reduce?'auto':'smooth'});
+    });
+
     /* Scroll progress bar */
     var bar=document.createElement('div'); bar.id='scroll-progress'; document.body.appendChild(bar);
     /* Back to top */
